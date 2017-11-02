@@ -1,0 +1,46 @@
+= CIDER: An attempt at detailed documentation
+
+The documentation for cider-nrepl is somewhat "whatever cider.el does with
+cider-nrepl". This is an attempt to reconcile that with hard information
+gleamed whilst writing an nREPL client.
+
+I've attempted to provide reference implementations in Clojure where available,
+thinking it the lingua fraca of implementors. This shouldn't be taken to mean
+that it's the language you should do this processing in.
+
+== Op `info`
+
+.Requires
+[horizontal]
+`ns` key:: the current namespace
+`symbol` key:: the symbol to get info on
+
+The return values of this function are hard to parse indepth, it's mostly a pass through of the metadata. Additional keys added:
+
+* `see-also` this was extracted from the clojuredocs database, and is added to info.
+
+=== Implementing a Doc
+
+_Based on the CIDER.el implementation._
+
+NOTE: arglists-str or forms-str will be returned, depending on whether it's a function/macro or a special like `.` or `def`.
+
+There is some work to separate the following:
+* Java "things"
+* Functions
+* Macros
+* Vars that don't point to either of the above (Numbers, Strings, etc.)
+* Specials
+
+.Determine a human friendly full name for the symbol
+[clojure]
+----
+(if (:class message) <1>
+  (if (:member message)
+    (format "%s/%s" (:class message) (:member message))
+    (:member message))
+  (if (:ns message)
+    (format "%s/%s" (:ns message) (:name message))
+    (:name message)))
+----
+1: The class key is used to check if this is a java symbol, or a clojure one.

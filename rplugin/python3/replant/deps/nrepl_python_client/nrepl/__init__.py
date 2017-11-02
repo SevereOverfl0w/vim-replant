@@ -12,7 +12,7 @@
 
 
 import socket
-import nrepl.bencode as bencode
+from replant.deps.nrepl_python_client.nrepl import bencode
 import threading
 try:
     from urlparse import urlparse, ParseResult

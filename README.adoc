@@ -1,0 +1,35 @@
+= replant.vim: Regrowing again
+Dominic Monroe <monroef4@googlemail.com>
+
+// I'm trying one sentence per-line here.
+
+____
+Insert some unrelated quote about replanting a new world here
+____
+
+I accept link:https://github.com/clojure-emacs[clojure-emacs]footnote:[Only *-nrepl though, of course. The emacs part is just crazy] hard work as necessary have nice things.
+I wish to have more features in vim, and I'm willing to accept coupling to more nrepl middleware for it.
+I'm a Neovim user, so would like to take advantage of new APIs to make developing vim plugins more powerful, or easy.
+
+With that in mind, here's the tentative list of potential requirements for this plugin:
+
+* Neovim
+* link:https://github.com/clojure-emacs/cider-nrepl[CIDER-nrepl]
+* link:https://github.com/clojure-emacs/refactor-nrepl[refactor-nrepl] (probably optional)
+
+== Features
+
+* [ ] Enhanced Docs
+** [*] Colourful echo'd output on `K`
+** [ ] Open document with shortcuts to close, works with `keywordprg`
+
+== Developing
+
+I use link:https://squiddev.github.io/urn/[urn] to generate lua files from lisp.
+This is fun. Don't doubt me.
+
+.Generate lua files for release
+[source]
+----
+$ make URNPATH=/home/dominic/src/gitlab.com/urn/urn
+----
