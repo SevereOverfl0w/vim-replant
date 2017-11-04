@@ -17,6 +17,15 @@ With that in mind, here's the tentative list of potential requirements for this 
 * link:https://github.com/clojure-emacs/cider-nrepl[CIDER-nrepl]
 * link:https://github.com/clojure-emacs/refactor-nrepl[refactor-nrepl] (probably optional)
 
+== Install
+
+.vim-plug
+[source,vim]
+----
+Plug 'SevereOverfl0w/replant'
+Plug 'tpope/vim-fireplace'
+----
+
 == Features
 
 * [ ] Enhanced Docs
