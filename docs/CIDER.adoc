@@ -8,7 +8,9 @@ I've attempted to provide reference implementations in Clojure where available,
 thinking it the lingua fraca of implementors. This shouldn't be taken to mean
 that it's the language you should do this processing in.
 
-== Op `info`
+== Ops
+
+=== `info`
 
 .Requires
 [horizontal]
@@ -19,7 +21,7 @@ The return values of this function are hard to parse indepth, it's mostly a pass
 
 * `see-also` this was extracted from the clojuredocs database, and is added to info.
 
-=== Implementing a Doc
+==== Implementing a Doc
 
 _Based on the CIDER.el implementation._
 
