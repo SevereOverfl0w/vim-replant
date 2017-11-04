@@ -6,7 +6,7 @@ endf
 fun! replant#collect_message(ms)
   let r = {}
 
-  for m in ms
+  for m in a:ms
     for [k, v] in items(m)
       if !has_key(r, k)
         let r[k] = v
