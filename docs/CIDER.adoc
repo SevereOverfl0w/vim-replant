@@ -46,3 +46,45 @@ There is some work to separate the following:
     (:name message)))
 ----
 1: The class key is used to check if this is a java symbol, or a clojure one.
+
+=== `refresh` / `refresh-all`
+
+.Parameters
+[horizontal]
+`before`:: A function to run before refreshing, as a string which will be resolved. The function must take no parameters. (Optional)
+`after`:: A function to run after refreshing, as a string which will be resolved. The function must take no parameters. (Optional)
+`dirs`:: Used to limit the scope of refreshing. Likely not useful for normal tooling. (Optional)
+
+During the process of generating the below replies, if an exception is thrown (e.g. through your before) then an error-reply will be sent, followed by an empty status done message.
+
+.Replies
+* pre-invocation of before (status will be `"invoking-before"`)
+[horizontal]
+`before`:: The symbol being resolved
+`status`:: Constant `"invoking-before"`
+* post-invocation of before
+[horizontal]
+`before`:: The symbol being resolved
+`status`:: status will be either `"invoked-before"` or `"invoked-not-resolved"`
+* pre-refresh (This contains the list of namespaces to reload)
+[horizontal]
+`reloading`:: The list of symbols to be reloaded
+* post-refresh
+** In the case of success
+[horizontal]
+`status`:: Constant `"ok"`
+** In the case of an error
+[horizontal]
+`error`:: The error (More docs needed on what this error is! I believe something will serialize it later)
+`error-ns`:: The namespace which caused the error as a string, e.g. `"clojure.core"`.
+* pre-invocation of after
+[horizontal]
+`after`:: The symbol being resolved
+`status`:: Constant `"invoking-after"`
+* post-invocation of after
+[horizontal]
+`after`:: The symbol being resolved
+`status`:: status will be either `"invoked-after"` or `"invoked-not-resolved"`
+* empty status done message
+[horizontal]
+`status`:: Constant `"done"`
