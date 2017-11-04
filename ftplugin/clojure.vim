@@ -1,5 +1,6 @@
-nnoremap <buffer><expr> <localleader>rf replant#refresh(replant#send_collect_message({'op': 'refresh'}))
-nnoremap <buffer><expr> <localleader>ra replant#refresh(replant#send_collect_message({'op': 'refresh-all'}))
+" Use :call so that all echos are collected together
+nnoremap <silent><buffer> <localleader>rf :<C-U>call replant#ui#refresh()<CR>
+nnoremap <silent><buffer> <localleader>ra :<C-U>call replant#ui#refresh_all()<CR>
 
 command! -buffer -nargs=? ReplantDoc call replant#doc(replant#send_collect_message(replant#doc_msg(fireplace#ns(), <f-args>)))
 

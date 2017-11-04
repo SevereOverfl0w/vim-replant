@@ -3,9 +3,7 @@ fun! replant#send_message(msg)
   return G_replant_send_message(l:port, a:msg)
 endf
 
-fun! replant#send_collect_message(msg)
-  let ms = replant#send_message(a:msg)
-
+fun! replant#collect_message(ms)
   let r = {}
 
   for m in ms
@@ -21,6 +19,11 @@ fun! replant#send_collect_message(msg)
   endfor
 
   return r
+endf
+
+fun! replant#send_collect_message(msg)
+  let ms = replant#send_message(a:msg)
+  return replant#collect_message(ms)
 endf
 
 fun s:nrepl_dict_get(m, k)
@@ -184,12 +187,48 @@ fun! replant#handle_plain_stack(error)
   endfor
 endf
 
-fun! replant#refresh(refresh_mc)
-  if s:contains(a:refresh_mc['status'], 'error')
-    call replant#handle_plain_stack(a:refresh_mc['error'])
-  endif
+fun! replant#refresh(refresh_msgs)
+  for msg in a:refresh_msgs
+    if has_key(msg, 'status') && s:contains(msg['status'], 'invoked-before')
+      echo '('.msg['before'].')'
+    endif
 
-  if s:contains(a:refresh_mc['status'], 'ok')
-    echo 'reloading: ('.join(a:refresh_mc['reloading'], " ").')'
+    if has_key(msg, 'reloading')
+      echo 'reloading: ('.join(msg['reloading'], " ").')'
+    endif
+
+    if has_key(msg, 'status') && s:contains(msg['status'], 'error')
+      call replant#handle_plain_stack(refresh_mc['error'])
+    endif
+
+    if has_key(msg, 'status') && s:contains(msg['status'], 'invoked-after')
+      echo '('.msg['after'].')'
+    endif
+  endfor
+endf
+
+fun! replant#read_clj_file(filename)
+  return join(readfile(globpath(&runtimepath, 'autoload/replant/'.a:filename)), "\n")
+endf
+
+fun! replant#detect_refresh_before()
+  if exists('g:replant_refresh_before_hook')
+    return g:replant_refresh_before_hook
+  else
+    let detected_before = fireplace#client().eval(replant#read_clj_file('locate_before.clj'), {'ns': 'user'})['value']
+    if detected_before !=# 'nil'
+      return detected_before
+    endif
+  endif
+endf
+
+fun! replant#detect_refresh_after()
+  if exists('g:replant_refresh_after_hook')
+    return g:replant_refresh_after_hook
+  else
+    let detected_after = fireplace#client().eval(replant#read_clj_file('locate_after.clj'), {'ns': 'user'})['value']
+    if detected_after !=# 'nil'
+      return detected_after
+    endif
   endif
 endf

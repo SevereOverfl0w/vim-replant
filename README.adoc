@@ -22,6 +22,14 @@ With that in mind, here's the tentative list of potential requirements for this 
 * [ ] Enhanced Docs
 ** [*] Colourful echo'd output on `K`
 ** [ ] Open document with shortcuts to close, works with `keywordprg`
+* [*] Refresh based on cider's built-in refresh
+
+=== Refresh
+
+`<localleader>rf` will perform a tools.namespace refresh, and `<localleader>ra` will perform a tools.namespace refresh-all.
+It searches for your stop/start functions in various namespaces automatically.
+If your stop/start functions are unique, you may set `g:replant_refresh_before_hook` and `g:replant_refresh_after_hook` to a symbol referring to your start/stop functions.
+Let me know if you have a common stop/start function or namespace which my detection missed.
 
 == Developing
 
