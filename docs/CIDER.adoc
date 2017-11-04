@@ -33,7 +33,7 @@ There is some work to separate the following:
 * Specials
 
 .Determine a human friendly full name for the symbol
-[clojure]
+[source,clojure]
 ----
 (if (:class message) <1>
   (if (:member message)
