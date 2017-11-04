@@ -3,8 +3,12 @@ Dominic Monroe <monroef4@googlemail.com>
 
 // I'm trying one sentence per-line here.
 
+[quote,,Online Etymology Dictionary and Oxford Dictionary]
 ____
-Insert some unrelated quote about replanting a new world here
+replant (v.)
+1570s, from re- "back, again" + plant (v.).
+
+Plant (a tree or plant that has been dug up) again, especially when transferring it to a larger pot or new site.
 ____
 
 I accept link:https://github.com/clojure-emacs[clojure-emacs]footnote:[Only *-nrepl though, of course. The emacs part is just crazy]' hard work as necessary have nice things.
