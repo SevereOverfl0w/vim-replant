@@ -23,7 +23,7 @@ class Replant(object):
         while True:
             m = c.read()
             result.append(m)
-            if "status" in m:
+            if "status" in m and "done" in m["status"]:
                 break
 
         return result
