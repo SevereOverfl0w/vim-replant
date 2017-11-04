@@ -174,7 +174,7 @@ fun! replant#doc(doc_mc)
 endf
 
 fun! replant#buffer_doc(doc_mc)
-  call luaeval('require("replant").buffer_doc(_A)', doc_mc)
+  call luaeval('require("replant").buffer_doc(_A)', a:doc_mc)
 endf
 
 fun! replant#handle_plain_stack(error)
