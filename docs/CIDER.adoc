@@ -117,3 +117,15 @@ You receive a single reply, containing the list of matches under the key `apropo
 `name`:: Full name of the matched symbol
 `doc`:: Docstring of the matched symbol
 `type`:: One of `"special-form"`, `"macro"`, `"function"` or `"variable"`
+
+=== `classpath`
+
+Get a list of the classpath.
+Uses clojure.java.classpath under the hood.
+
+.Parameters
+None
+
+.Response
+[horizontal]
+`classpath`:: A list of strings which is the classpath
