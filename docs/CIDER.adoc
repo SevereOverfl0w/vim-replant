@@ -88,3 +88,32 @@ During the process of generating the below replies, if an exception is thrown (e
 * empty status done message
 [horizontal]
 `status`:: Constant `"done"`
+
+=== `apropos`: Search for vars
+
+[quote,cider-nrepl source]
+____
+This middleware provides regular expression search across namespaces for both symbols and documentation.
+Results ordered for the most common usages:
+symbols from the current namespace are preferred, then `clojure.*` symbols, and then other results.
+____
+
+.Parameters
+[horizontal]
+`ns`:: Priority namespace to list.
+This is intended to be current namespace.
+The matches will list this namespace first.
+`query`:: Regexp to match symbols against
+`search-ns`:: This will be the only namespace searched if provided
+`docs?`:: Predicate, whether or not to search docstrings
+`privates?`:: Whether or not to include private symbols
+`case-sensitive?`:: Case sensitivity of the regexp
+`filter-regexps`:: Remove symbols which match this regexp
+
+You receive a single reply, containing the list of matches under the key `apropos-matches`.
+
+.Apropos Matches
+[horizontal]
+`name`:: Full name of the matched symbol
+`doc`:: Docstring of the matched symbol
+`type`:: One of `"special-form"`, `"macro"`, `"function"` or `"variable"`
