@@ -18,4 +18,11 @@ endf
 " better to do a split like `:help`
 " I won't pretend to know why, but using <expr> here, also has the same bug as
 " setting 'keywordprg'
-noremap <buffer> K :call <SID>replant_doc()<CR>
+" noremap <buffer> K :call <SID>replant_doc()<CR>
+
+
+function! SetupReplantBufferDoc()
+  nunmap <buffer> K
+  command! -buffer -nargs=? ReplantBufferDoc call replant#buffer_doc(replant#send_collect_message(replant#doc_msg(fireplace#ns(), <f-args>)))
+  setlocal keywordprg=:ReplantBufferDoc
+endfunction

@@ -27,8 +27,21 @@
   "Abbreviate the file-path in `file:/path/to/file' of FILE-WITH-PROTOCOL."
   (with (file (string/match file-with-protocol "^file:(.*)"))
     (if file
-      (nvim/nvim_call_function "fnamemodify" [file ":."])
+      (nvim/nvim_call_function* "fnamemodify" file ":." )
       file-with-protocol)))
+
+(defun info-file->vim-file
+  (file)
+  (cond
+    [(= nil file) 0]
+
+    [(string/match file "^file:(.*)")
+     (nvim/nvim_call_function* "fnamemodify" (string/match file "^file:(.*)") ":.")]
+
+    [(string/match file "^jar:file:(.*)")
+     (string/gsub file "^jar:file:(.*)!/(.*)" "zipfile:%1::%2")]
+
+    [else 0]))
 
 (defun set-local-opt (opt*)
   (nvim/nvim_command
@@ -43,7 +56,7 @@
   (let [(options (gensym))
         (opt* (gensym))]
     `(progn
-       (nvim/nvim_command (.. "vsplit " ,name))
+       (nvim/nvim_command (.. "split " ,name))
        (let [(,options (list
                          (list "bufhidden" "hide")
                          (list "buflisted" false)
@@ -55,43 +68,17 @@
                          (list "modifiable" true)))]
          (dolist [(,opt* ,options)]
            (set-local-opt ,opt*)))
+       (nvim/nvim_command "%delete _")
        ,@body
        (set-local-opt (list "modifiable" false)))))
 
-(defun list->struct
-  (x)
-  (when (list? x)
-    (.<! x :n nil)
-    (.<! x :tag nil))
-  x)
-
-(defun do-stuff (str)
-  (create-immutable-buffer
-    "foobar"
-    (nvim/nvim_call_function* "setline"
-                              (nvim/nvim_call_function* "line" "$")
-                              (list->struct (list "# THE END")))
-    (nvim/nvim_call_function* "append"
-                              (nvim/nvim_call_function* "line" "$")
-                              (list->struct (list "# j/k")))
-    (nvim/nvim_call_function* "append"
-                              (nvim/nvim_call_function* "line" "$")
-                              (list->struct (list "# j/k2")))))
-
-(defun do-athing ()
-  (list->struct (list 1 2 3)))
-
 (defun buffer-echo (msg)
-  (with [line (nvim/nvim_call_function* "line" "$")]
-    (nvim/nvim_call_function* "append"
-                              (nvim/nvim_call_function* "line" "$")
-                              msg)))
+  (with [line (- (nvim/nvim_call_function* "line" "$") 1)]
+    (nvim/nvim_call_function* "append" line msg)))
 
 (defun buffer-emit (msg hl-group)
-  (with [line (nvim/nvim_call_function* "line" "$")]
-    (nvim/nvim_call_function* "append"
-                              (nvim/nvim_call_function* "line" "$")
-                              msg)
+  (with [line (- (nvim/nvim_call_function* "line" "$") 1)]
+    (nvim/nvim_call_function* "append" line msg)
     (nvim/nvim_buf_add_highlight
       (nvim/nvim_get_current_buf)
       -1
@@ -126,8 +113,15 @@
          (java-name (if member (concat class "/" member) class))
          (see-also (struct->list* (.> info "see-also")))]
     (create-immutable-buffer (.. (or (if class java-name clj-name) "niledout") ".replantdoc")
-
-      (emit (if class java-name clj-name) "Error")
+      (nvim/nvim_command "resize 20")
+      (emit (if class java-name clj-name)
+            (cond
+              [macro "Macro"]
+              [special "Special"]
+              [args "Function"]
+              [class "StorageClass"]
+              [(and ns name) "Macro"]
+              [else "Error"]))
       (when super
         (echo ($ "   Extends: ${super}")))
       (when ifaces
@@ -138,19 +132,20 @@
         (echo "\n"))
 
       (when-with [forms (or forms args)]
-                 (do [(form forms)]
-                   (emit ($ " ${form}") "Error")))
+        (do [(form forms)]
+          (echo ($ " ${form}"))))
 
       (when special
-        (emit "Special Form" "Error"))
+        (echo "Special Form"))
       (when macro
-        (emit "Macro" "Error"))
+        (echo "Macro"))
       (when added
         (emit ($ "Added in ${added}") "Comment"))
       (when depr
         (emit ($ "Deprecated in ${depr}") "Error"))
 
-      (echo ($ "  ${doc}"))
+      (let [(ndoc (list->struct (string/split ($ "  ${doc}") "\n")))]
+        (echo ndoc))
       (when-with (url (or url javadoc))
                  (echo ($ "\nPlease see ${url}")))
 
@@ -171,12 +166,24 @@
       ;     (insert "."))
       ;   (insert "Definition location unavailable."))
 
-      (let [(name (if class java-name clj-name))
-            (c-file (cider--abbreviate-file-protocol file))]
-        (emit ($ "${name} is defined in ${c-file}") "Comment"))
+      ;; Commented out in favour of a mapping in the buffer
+      ; (let [(name (if class java-name clj-name))
+      ;       (j-file (info-file->vim-file file))]
+      ;   (emit ($ "Jump to ${j-file}") "Comment"))
+
+      (with [amicrazy (info-file->vim-file file)]
+        ;; some bug causes this not to work if the function call is in-line, so
+        ;; I create a var… I might start drinking.
+        (nvim/nvim_buf_set_var (nvim/nvim_get_current_buf) "replant_jump_file" amicrazy))
+      (nvim/nvim_buf_set_var (nvim/nvim_get_current_buf) "replant_jump_line" (.> info "line"))
+      (nvim/nvim_buf_set_var (nvim/nvim_get_current_buf) "replant_jump_column" (.> info "column"))
 
       (when see-also
-        (echo (.. "\nAlso see: " (string/concat see-also " "))))
+        (echo
+          (list->struct
+            (list
+              ""
+              (.. "Also see: " (string/concat see-also " "))))))
 
       ; (cider--doc-make-xrefs)
       ; (let ((beg (point-min))
@@ -269,7 +276,5 @@
     ))
 
 {:doc doc
- :do_stuff do-stuff
- :do_athing do-athing
  :buffer_emit buffer-emit
  :buffer_doc doc-buffer}
