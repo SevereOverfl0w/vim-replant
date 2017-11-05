@@ -58,18 +58,18 @@ There is some work to separate the following:
 During the process of generating the below replies, if an exception is thrown (e.g. through your before) then an error-reply will be sent, followed by an empty status done message.
 
 .Replies
-* pre-invocation of before (status will be `"invoking-before"`)
+1. pre-invocation of before (status will be `"invoking-before"`)
 [horizontal]
 `before`:: The symbol being resolved
 `status`:: Constant `"invoking-before"`
-* post-invocation of before
+2. post-invocation of before
 [horizontal]
 `before`:: The symbol being resolved
 `status`:: status will be either `"invoked-before"` or `"invoked-not-resolved"`
-* pre-refresh (This contains the list of namespaces to reload)
+3. pre-refresh (This contains the list of namespaces to reload)
 [horizontal]
 `reloading`:: The list of symbols to be reloaded
-* post-refresh
+4. post-refresh
 ** In the case of success
 [horizontal]
 `status`:: Constant `"ok"`
@@ -77,15 +77,15 @@ During the process of generating the below replies, if an exception is thrown (e
 [horizontal]
 `error`:: The error (More docs needed on what this error is! I believe something will serialize it later)
 `error-ns`:: The namespace which caused the error as a string, e.g. `"clojure.core"`.
-* pre-invocation of after
+5. pre-invocation of after
 [horizontal]
 `after`:: The symbol being resolved
 `status`:: Constant `"invoking-after"`
-* post-invocation of after
+6. post-invocation of after
 [horizontal]
 `after`:: The symbol being resolved
 `status`:: status will be either `"invoked-after"` or `"invoked-not-resolved"`
-* empty status done message
+7. empty status done message
 [horizontal]
 `status`:: Constant `"done"`
 
