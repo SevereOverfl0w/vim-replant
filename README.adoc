@@ -40,7 +40,7 @@ I am available on link:http://clojurians.net/[Clojurians Slack] in either #vim-f
 .vim-plug
 [source,vim]
 ----
-Plug 'SevereOverfl0w/replant'
+Plug 'SevereOverfl0w/vim-replant'
 Plug 'tpope/vim-fireplace'
 ----
 
