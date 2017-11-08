@@ -190,11 +190,11 @@ endf
 fun! replant#refresh(refresh_msgs)
   for msg in a:refresh_msgs
     if has_key(msg, 'status') && s:contains(msg['status'], 'invoked-before')
-      echo '('.msg['before'].')'
+      echom '('.msg['before'].')'
     endif
 
     if has_key(msg, 'reloading')
-      echo 'reloading: ('.join(msg['reloading'], " ").')'
+      echom 'reloading: ('.join(msg['reloading'], " ").')'
     endif
 
     if has_key(msg, 'status') && s:contains(msg['status'], 'error')
@@ -202,7 +202,7 @@ fun! replant#refresh(refresh_msgs)
     endif
 
     if has_key(msg, 'status') && s:contains(msg['status'], 'invoked-after')
-      echo '('.msg['after'].')'
+      echom '('.msg['after'].')'
     endif
   endfor
 endf
