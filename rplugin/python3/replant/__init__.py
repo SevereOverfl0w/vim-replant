@@ -27,3 +27,25 @@ class Replant(object):
                 break
 
         return result
+
+    @neovim.function("G_replant_send_message_callback", sync=True)
+    def send_message_callback(self, args):
+        c = nrepl.connect("nrepl://localhost:{}".format(args[0]))
+        msg = args[1]
+        callback = args[2]
+
+        if "id" not in msg:
+            msg["id"] = "replant--" + str(uuid.uuid4())
+
+        c.write(msg)
+
+        while True:
+            m = c.read()
+
+            if msg["id"] == m.get("id"):
+                self.nvim.call(callback, m)
+
+            if "status" in m and "done" in m["status"]:
+                break
+
+        return True

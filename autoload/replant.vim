@@ -3,6 +3,11 @@ fun! replant#send_message(msg)
   return G_replant_send_message(l:port, a:msg)
 endf
 
+fun! replant#send_message_callback(msg, callback)
+  let l:port = fireplace#client()['connection']['transport']['port']
+  return G_replant_send_message_callback(l:port, a:msg, a:callback)
+endf
+
 fun! replant#collect_message(ms)
   let r = {}
 
@@ -187,24 +192,22 @@ fun! replant#handle_plain_stack(error)
   endfor
 endf
 
-fun! replant#refresh(refresh_msgs)
-  for msg in a:refresh_msgs
-    if has_key(msg, 'status') && s:contains(msg['status'], 'invoked-before')
-      echom '('.msg['before'].')'
-    endif
+fun! replant#handle_refresh_msg(msg)
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-before')
+    echom '('.a:msg['before'].')'
+  endif
 
-    if has_key(msg, 'reloading')
-      echom 'reloading: ('.join(msg['reloading'], " ").')'
-    endif
+  if has_key(a:msg, 'reloading')
+    echom 'reloading: ('.join(a:msg['reloading'], " ").')'
+  endif
 
-    if has_key(msg, 'status') && s:contains(msg['status'], 'error')
-      call replant#handle_plain_stack(refresh_mc['error'])
-    endif
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'error')
+    call replant#handle_plain_stack(refresh_mc['error'])
+  endif
 
-    if has_key(msg, 'status') && s:contains(msg['status'], 'invoked-after')
-      echom '('.msg['after'].')'
-    endif
-  endfor
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-after')
+    echom '('.a:msg['after'].')'
+  endif
 endf
 
 fun! replant#read_clj_file(filename)
