@@ -11,7 +11,7 @@ replant (v.)
 Plant (a tree or plant that has been dug up) again, especially when transferring it to a larger pot or new site.
 ____
 
-I accept link:https://github.com/clojure-emacs[clojure-emacs]footnote:[Only *-nrepl though, of course. The emacs part is just crazy]' hard work as necessary have nice things.
+I accept link:https://github.com/clojure-emacs[clojure-emacs]'footnote:[Only *-nrepl though, of course. The emacs part is just crazy] hard work as necessary to have nice things.
 I wish to have more features in vim, and I'm willing to accept coupling to more nrepl middleware for it.
 I'm a Neovim user, so would like to take advantage of new APIs to make developing vim plugins more powerful, or easy.
 
