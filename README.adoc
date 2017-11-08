@@ -37,10 +37,12 @@ I am available on link:http://clojurians.net/[Clojurians Slack] in either #vim-f
 
 == Install
 
+Currentlyfootnote:[One day I'd like to do this in lua or with a cross-platform Go binary, but not today], this plugin depends on link:https://github.com/neovim/python-client[python-client], so install that first.
+
 .vim-plug
 [source,vim]
 ----
-Plug 'SevereOverfl0w/vim-replant'
+Plug 'SevereOverfl0w/vim-replant', { 'do': ':UpdateRemotePlugins' }
 Plug 'tpope/vim-fireplace'
 ----
 
