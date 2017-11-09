@@ -186,7 +186,7 @@ fun! replant#handle_plain_stack(error)
   for e in a:error
     if has_key(e, 'file')
       echohl Error
-      echo e['file'].':'.e['line'].':'.e['column'].': '.e['message']
+      echom e['file'].':'.e['line'].':'.e['column'].': '.e['message']
       echohl Normal
     endif
   endfor
