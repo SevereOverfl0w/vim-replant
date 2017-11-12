@@ -1,4 +1,5 @@
 = CIDER: An attempt at detailed documentation
+:toc:
 
 The documentation for cider-nrepl is somewhat "whatever cider.el does with
 cider-nrepl". This is an attempt to reconcile that with hard information
