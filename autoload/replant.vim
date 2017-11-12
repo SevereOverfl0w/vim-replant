@@ -1,44 +1,5 @@
-fun! replant#send_message(msg)
-  let l:port = fireplace#client()['connection']['transport']['port']
-  return G_replant_send_message(l:port, a:msg)
-endf
-
-fun! replant#send_message_callback(msg, callback)
-  let l:port = fireplace#client()['connection']['transport']['port']
-  return G_replant_send_message_callback(l:port, a:msg, a:callback)
-endf
-
-fun! replant#collect_message(ms)
-  let r = {}
-
-  for m in a:ms
-    for [k, v] in items(m)
-      if !has_key(r, k)
-        let r[k] = v
-      else
-        if k == "out"
-          let r[k] .= v
-        endif
-      endif
-    endfor
-  endfor
-
-  return r
-endf
-
-fun! replant#send_collect_message(msg)
-  let ms = replant#send_message(a:msg)
-  return replant#collect_message(ms)
-endf
-
-fun s:nrepl_dict_get(m, k)
-  if has_key(a:m, a:k)
-    return a:m[a:k]
-  endif
-endf
-
 fun! replant#user_eval(code)
-  let mc = replant#send_collect_message({'op': 'eval', 'code': a:code})
+  let mc = replant#message#send_collect({'op': 'eval', 'code': a:code})
   if has_key(mc, "out")
     echo mc["out"]
     echo "---"

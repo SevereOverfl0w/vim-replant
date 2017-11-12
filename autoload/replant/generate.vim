@@ -21,7 +21,7 @@ endf
 fun! replant#generate#find_symbol_under_cursor()
   let symbol = expand('<cword>')
   " Calculate symbol ns
-  let info = replant#send_collect_message({'op': 'info', 'symbol': symbol, 'ns': fireplace#ns()})
+  let info = replant#message#send_collect({'op': 'info', 'symbol': symbol, 'ns': fireplace#ns()})
 
   if !has_key(info, 'ns')
     echo "Couldn't find namespace for '".symbol."', maybe the namespace hasn't been loaded?"

@@ -2,7 +2,7 @@
 nnoremap <silent><buffer> <localleader>rf :<C-U>call replant#ui#refresh()<CR>
 nnoremap <silent><buffer> <localleader>ra :<C-U>call replant#ui#refresh_all()<CR>
 
-command! -buffer -nargs=? ReplantDoc call replant#doc(replant#send_collect_message(replant#doc_msg(fireplace#ns(), <f-args>)))
+command! -buffer -nargs=? ReplantDoc call replant#doc(replant#message#send_collect(replant#doc_msg(fireplace#ns(), <f-args>)))
 
 fun! s:replant_doc(...)
   if a:0 == 0
@@ -23,7 +23,7 @@ endf
 
 function! SetupReplantBufferDoc()
   nunmap <buffer> K
-  command! -buffer -nargs=? ReplantBufferDoc call replant#buffer_doc(replant#send_collect_message(replant#doc_msg(fireplace#ns(), <f-args>)))
+  command! -buffer -nargs=? ReplantBufferDoc call replant#buffer_doc(replant#message#send_collect(replant#doc_msg(fireplace#ns(), <f-args>)))
   setlocal keywordprg=:ReplantBufferDoc
 endfunction
 
