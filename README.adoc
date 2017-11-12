@@ -52,6 +52,12 @@ Plug 'tpope/vim-fireplace'
 ** [*] Colourful echo'd output on `K`
 ** [ ] Open document with shortcuts to close, works with `keywordprg`
 * [*] Refresh based on cider's built-in refresh
+* [ ] Find symbol
+** [*] Basic quickfix command
+** [ ] Keybinding
+** [ ] fzf integration
+** [ ] Denite integration
+** [ ] Async quickfix
 
 === Refresh
 
@@ -59,6 +65,11 @@ Plug 'tpope/vim-fireplace'
 It searches for your stop/start functions in various namespaces automatically.
 If your stop/start functions are unique, you may set `g:replant_refresh_before_hook` and `g:replant_refresh_after_hook` to a symbol referring to your start/stop functions.
 Let me know if you have a common stop/start function or namespace which my detection missed.
+
+=== Find symbol
+
+The command `:ReplantFindSymbol` will find references to the symbol under the cursor.
+They quickfix window will open automatically after this, if there are any matches found.
 
 == Developing
 
