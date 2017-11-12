@@ -7,8 +7,11 @@ fun! replant#ui#refresh_all()
 endf
 
 fun! replant#ui#find_symbol_under_cursor_quickfix()
-  call replant#handle#quickfix_find_symbol(replant#send_message(replant#generate#find_symbol_under_cursor()))
-  " TODO: Consider triggering an autocmd that vim-qf can respond to here, in
-  " order to be less opinionated
-  cwindow
+  let msg = replant#generate#find_symbol_under_cursor()
+  if msg isnot 0
+    call replant#handle#quickfix_find_symbol(replant#send_message(msg))
+    " TODO: Consider triggering an autocmd that vim-qf can respond to here, in
+    " order to be less opinionated
+    cwindow
+  endif
 endf

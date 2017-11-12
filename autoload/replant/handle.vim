@@ -9,6 +9,9 @@ fun! replant#handle#quickfix_find_symbol(msgs)
       let d.col = occurrence['col-beg']
       let d.text = occurrence['match']
       call add(qfs, d)
+    elseif has_key(msg, 'error')
+      echo msg['error']
+      return 0
     endif
   endfor
 
