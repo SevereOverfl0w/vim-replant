@@ -129,3 +129,40 @@ None
 .Response
 [horizontal]
 `classpath`:: A list of strings which is the classpath
+
+=== Test middleware
+
+.List of test-related ops
+* `test`
+* `test-all`
+* `test-stacktrace`
+* `retest`
+
+`test` and `test-all` are very similar, except in scope.
+They run tests, and produce a test report.
+
+.`test` parameters
+[horizontal]
+`ns`:: Current namespace for which user believes themselves in. Used for looking up test vars.
+`tests`:: A list of vars which to test.
+
+.`test-all` parameters
+[horizontal]
+`load?`:: Set to any value (I prefer `1`) if this hsould load namespaces (`require` them) or just use the already loaded ones.
+
+`retest` re-runs all the tests that failed in the last run of `test` or `test-all`.
+It takes no parameters.
+It returns a test report also.
+
+.Test report format
+_To be written_
+
+`test-stacktrace` is a useful op for using CIDER's stacktrace functionality to inspect a stacktrace that happens during a test.
+
+.`test-stacktrace` parameters
+[horizontal]
+`ns`:: Namespace of test that failed.
+`var`:: Var within that namespace that failed.
+`index`:: Index of test that failed
+
+See <<stacktrace>> for more info.
