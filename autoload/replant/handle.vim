@@ -4,7 +4,7 @@ fun! replant#handle#quickfix_find_symbol(msgs)
     if has_key(msg, 'occurrence')
       let occurrence = msg['occurrence']
       let d = {}
-      let d.filename = occurrence.file
+      let d.filename = fnamemodify(occurrence.file, ':~:.')
       let d.lnum = occurrence['line-beg']
       let d.col = occurrence['col-beg']
       let d.text = occurrence['match']
