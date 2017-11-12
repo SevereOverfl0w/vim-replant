@@ -193,20 +193,28 @@ fun! replant#handle_plain_stack(error)
 endf
 
 fun! replant#handle_refresh_msg(msg)
-  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-before')
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoking-before')
     echom '('.a:msg['before'].')'
   endif
 
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-before')
+    echom "…Done!"
+  endif
+
   if has_key(a:msg, 'reloading')
-    echom 'reloading: ('.join(a:msg['reloading'], " ").')'
+    echom 'reloading: ('.join(a:msg['reloading'], " ").")"
   endif
 
   if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'error')
-    call replant#handle_plain_stack(refresh_mc['error'])
+    call replant#handle_plain_stack(a:msg['error'])
+  endif
+
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoking-after')
+    echom '('.a:msg['after'].')'
   endif
 
   if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-after')
-    echom '('.a:msg['after'].')'
+    echom '… Done!'
   endif
 endf
 
