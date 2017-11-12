@@ -17,3 +17,12 @@ fun! replant#handle#quickfix_find_symbol(msgs)
 
   call setqflist(qfs)
 endf
+
+fun! replant#handle#hotload(cmsg)
+  if has_key(a:cmsg, 'dependency')
+    echo 'Hotloaded '.a:cmsg.dependency
+  endif
+  if has_key(a:cmsg, 'error')
+    echo a:cmsg.error
+  endif
+endf

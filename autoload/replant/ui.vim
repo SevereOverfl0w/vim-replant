@@ -15,3 +15,26 @@ fun! replant#ui#find_symbol_under_cursor_quickfix()
     cwindow
   endif
 endf
+
+fun! replant#ui#hotload_separately(artifact, version)
+  let msg = {'op': 'hotload-dependency', 'coordinates': '['.a:artifact.' "'.a:version.'"]'}
+  call replant#handle#hotload(replant#send_collect_message(msg))
+endf
+
+fun! replant#ui#hotload_vector(vector)
+  let msg = {'op': 'hotload-dependency', 'coordinates': a:vector}
+  call replant#handle#hotload(replant#send_collect_message(msg))
+endf
+
+fun! replant#ui#hotload_command(linea, lineb, ...)
+  if a:0 isnot 0 && a:0 isnot 2
+    echoerr 'Invalid number of arguments'
+    return
+  endif
+
+  if a:0 is 0
+    call replant#ui#hotload_vector(join(getline(a:linea, a:lineb), "\n"))
+  else
+    call replant#ui#hotload_separately(a:1, a:2)
+  endif
+endf

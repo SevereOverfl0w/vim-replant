@@ -58,6 +58,7 @@ Plug 'tpope/vim-fireplace'
 ** [ ] fzf integration
 ** [ ] Denite integration
 ** [ ] Async quickfix
+* [*] Hotload dependencies
 
 === Refresh
 
@@ -70,6 +71,12 @@ Let me know if you have a common stop/start function or namespace which my detec
 
 The command `:ReplantFindSymbol` will find references to the symbol under the cursor.
 They quickfix window will open automatically after this, if there are any matches found.
+
+=== Dependency hotloading
+
+`:ReplantHotloadDependency aero 1.1.2` will hotload a named dependency into the current JVM.
+
+`<range>:ReplantHotloadDependency` will hotload a dependency in leiningen coordinate style into the current JVM. Intended for use with vim-sexp like `vaf:ReplantHotloadDependency` when on the coordinate.
 
 == Developing
 
