@@ -21,32 +21,6 @@ The return values of this function are hard to parse indepth, it's mostly a pass
 
 * `see-also` this was extracted from the clojuredocs database, and is added to info.
 
-==== Implementing a Doc
-
-_Based on the CIDER.el implementation._
-
-NOTE: arglists-str or forms-str will be returned, depending on whether it's a function/macro or a special like `.` or `def`.
-
-There is some work to separate the following:
-* Java "things"
-* Functions
-* Macros
-* Vars that don't point to either of the above (Numbers, Strings, etc.)
-* Specials
-
-.Determine a human friendly full name for the symbol
-[source,clojure]
-----
-(if (:class message) <1>
-  (if (:member message)
-    (format "%s/%s" (:class message) (:member message))
-    (:member message))
-  (if (:ns message)
-    (format "%s/%s" (:ns message) (:name message))
-    (:name message)))
-----
-1: The class key is used to check if this is a java symbol, or a clojure one.
-
 === `refresh` / `refresh-all`
 
 .Parameters
@@ -166,3 +140,8 @@ _To be written_
 `index`:: Index of test that failed
 
 See <<stacktrace>> for more info.
+
+[[stacktrace]]
+=== `stacktrace` middleware
+
+
