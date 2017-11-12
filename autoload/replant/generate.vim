@@ -17,3 +17,19 @@ fun! replant#generate#refresh_all()
   let msg.op = 'refresh-all'
   return msg
 endf
+
+fun! replant#generate#find_symbol_under_cursor()
+  let symbol = expand('<cword>')
+  " Calculate symbol ns
+  let info = replant#send_collect_message({'op': 'info', 'symbol': symbol, 'ns': fireplace#ns()})
+
+  let msg = {'op': 'find-symbol',
+           \ 'ns': info['ns'],
+           \ 'name': expand('<cword>'),
+           \ 'file': expand('%:p'),
+           \ 'line': line('.'),
+           \ 'column': col('.'),
+           \ 'serialization-format': 'bencode',
+           \ 'ignore-errors': 1}
+  return msg
+endf

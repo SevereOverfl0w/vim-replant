@@ -26,3 +26,5 @@ function! SetupReplantBufferDoc()
   command! -buffer -nargs=? ReplantBufferDoc call replant#buffer_doc(replant#send_collect_message(replant#doc_msg(fireplace#ns(), <f-args>)))
   setlocal keywordprg=:ReplantBufferDoc
 endfunction
+
+command! -buffer -nargs=0 ReplantFindSymbol call replant#ui#find_symbol_under_cursor_quickfix()
