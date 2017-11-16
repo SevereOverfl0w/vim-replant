@@ -164,6 +164,8 @@ fun! replant#handle_refresh_msg(msg)
     echom '('.a:msg['after'].')'
   elseif has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-after')
     echom '… Done!'
+  elseif has_key(a:msg, 'out')
+    echo a:msg.out
   endif
 
   if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'error')
