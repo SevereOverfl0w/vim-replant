@@ -696,4 +696,4 @@ doc1 = function(info)
 		return nil
 	end
 end
-return {["doc"]=doc1, ["buffer_emit"]=bufferEmit1, ["buffer_doc"]=docBuffer1}
+return {["doc"]=doc1, ["buffer_emit"]=bufferEmit1, ["buffer_doc"]=docBuffer1, ["info-file->vim-file"]=infoFile_2d3e_vimFile1}

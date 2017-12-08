@@ -277,4 +277,5 @@
 
 {:doc doc
  :buffer_emit buffer-emit
- :buffer_doc doc-buffer}
+ :buffer_doc doc-buffer
+ :info-file->vim-file info-file->vim-file}
