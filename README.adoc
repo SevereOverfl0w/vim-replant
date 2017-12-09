@@ -49,7 +49,7 @@ Plug 'tpope/vim-fireplace'
 == Features
 
 * [ ] Enhanced Docs
-** [*] Colourful echo'd output on `K`
+** [ ] Colourful echo'd output on `K`
 ** [ ] Open document with shortcuts to close, works with `keywordprg`
 * [*] Refresh based on cider's built-in refresh
 * [ ] Find symbol
