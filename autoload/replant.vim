@@ -190,7 +190,7 @@ fun! replant#detect_refresh_before()
   if exists('g:replant_refresh_before_hook')
     return g:replant_refresh_before_hook
   else
-    let detected_before = fireplace#client().eval(replant#read_clj_file('locate_before.clj'), {'ns': 'user'})['value']
+    let detected_before = fireplace#platform().eval(replant#read_clj_file('locate_before.clj'), {'ns': 'user'})['value']
     if detected_before !=# 'nil'
       return detected_before
     endif
@@ -201,7 +201,7 @@ fun! replant#detect_refresh_after()
   if exists('g:replant_refresh_after_hook')
     return g:replant_refresh_after_hook
   else
-    let detected_after = fireplace#client().eval(replant#read_clj_file('locate_after.clj'), {'ns': 'user'})['value']
+    let detected_after = fireplace#platform().eval(replant#read_clj_file('locate_after.clj'), {'ns': 'user'})['value']
     if detected_after !=# 'nil'
       return detected_after
     endif
