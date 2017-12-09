@@ -59,6 +59,7 @@ Plug 'tpope/vim-fireplace'
 ** [ ] Denite integration
 ** [ ] Async quickfix
 * [*] Hotload dependencies
+* [*] Auto-insertion of (ns) for new files.
 
 === Refresh
 
