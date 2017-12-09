@@ -38,3 +38,19 @@ fun! replant#ui#hotload_command(linea, lineb, ...)
     call replant#ui#hotload_separately(a:1, a:2)
   endif
 endf
+
+fun! replant#ui#relpath_to_namespace(path)
+  return luaeval('require("replant_raw")["path_to_ns"](_A)', fnamemodify(a:path, ':r'))
+endf
+
+fun! replant#ui#expected_ns(...)
+  let buffer = a:000 is 1 ? a:1 : nvim_get_current_buf()
+  let classpath = get(replant#send#message({'op': 'classpath'})[0], 'classpath')
+
+  if classpath isnot 0
+    let abspath = fnamemodify(bufname(buffer), ':p')
+    let relpath = luaeval('require("replant_raw")["find_relpath"](_A.classpath, _A.abspath)',
+          \ {'abspath': abspath, 'classpath': classpath})
+    return replant#ui#relpath_to_namespace(relpath)
+  endif
+endf
