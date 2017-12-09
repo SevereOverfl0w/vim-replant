@@ -143,14 +143,23 @@ fun! replant#buffer_doc(doc_mc)
   call luaeval('require("replant").buffer_doc(_A)', a:doc_mc)
 endf
 
+fun! replant#url_to_vim(url)
+  return luaeval('require("replant")["info-file->vim-file"](_A)', a:url)
+endf
+
 fun! replant#handle_plain_stack(error)
+  let qfs = []
+  call reverse(a:error)
   for e in a:error
-    if has_key(e, 'file')
-      echohl Error
-      echom e['file'].':'.e['line'].':'.e['column'].': '.e['message']
-      echohl Normal
+    if has_key(e, 'stacktrace')
+      call replant#handle#stacktraces(qfs, e.stacktrace)
     endif
   endfor
+
+  call replant#handle#insert_top_level_messages(qfs, a:error)
+
+  call setloclist(0, qfs)
+  lopen
 endf
 
 fun! replant#handle_refresh_msg(msg)

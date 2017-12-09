@@ -26,3 +26,46 @@ fun! replant#handle#hotload(cmsg)
     echo a:cmsg.error
   endif
 endf
+
+fun! replant#handle#stacktraces(qfs, stacktraces)
+  for stacktrace in a:stacktraces
+    let d = {}
+    let d.lnum = stacktrace['line']
+    let d.text = stacktrace['name']
+
+
+    if has_key(stacktrace, 'file-url') && type(stacktrace['file-url']) == v:t_string
+      let file = replant#url_to_vim(stacktrace['file-url'])
+      let d.filename = fnamemodify(file, ':~:.')
+    else
+      let d.text = '['.get(stacktrace, 'file').'] '.d.text
+    endif
+
+    let d.text .= ' '.join(map(stacktrace['flags'], {idx, val -> '#'.val}), ' ')
+    call add(a:qfs, d)
+  endfor
+endf
+
+fun! replant#handle#insert_top_level_messages(qfs, errors)
+  for e in a:errors
+    if has_key(e, 'message')
+      let d = {}
+
+      if has_key(e, 'file-url') && type(e['file-url']) == v:t_string
+        let d.filename = replant#url_to_vim(e['file-url'])
+      endif
+
+      if has_key(e, 'line')
+        let d.lnum = e.line
+      endif
+
+      if has_key(e, 'column')
+        let d.col = e.column
+      endif
+
+      let d.text = e.message
+
+      call insert(a:qfs, d)
+    endif
+  endfor
+endf
