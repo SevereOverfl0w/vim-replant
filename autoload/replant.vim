@@ -207,3 +207,12 @@ fun! replant#detect_refresh_after()
     endif
   endif
 endf
+
+function! replant#insert_ns_definition_maybe()
+  try
+    if &buftype !~# '^no' && &modifiable
+      call append(0, '(ns '.replant#ui#expected_ns().')')
+    endif
+  catch /Fireplace:.*/
+  endtry
+endfunction

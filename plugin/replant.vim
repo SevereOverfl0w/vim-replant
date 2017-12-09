@@ -5,3 +5,8 @@ if exists('g:rainbow_conf')
   endif
   let g:rainbow_conf.separately['replant-doc'] = 0
 endif
+
+augroup Replant
+  autocmd!
+  autocmd BufNewFile *.clj,*.clj[cs] :call replant#insert_ns_definition_maybe()
+augroup END
