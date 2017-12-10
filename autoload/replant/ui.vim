@@ -54,3 +54,11 @@ fun! replant#ui#expected_ns(...)
     return replant#ui#relpath_to_namespace(relpath)
   endif
 endf
+
+fun! replant#ui#quickfix_resources_list()
+  let send = replant#generate#resource_list()
+  let msgs = replant#send#message(send)
+  let qfs = replant#handle#quickfix_resources_list(msgs)
+  call setqflist(qfs)
+  copen
+endf

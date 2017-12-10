@@ -38,3 +38,7 @@ fun! replant#generate#find_symbol_under_cursor()
            \ 'ignore-errors': 1}
   return msg
 endf
+
+fun! replant#generate#resource_list()
+  return {'op': 'resources-list'}
+endf

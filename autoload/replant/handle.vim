@@ -69,3 +69,19 @@ fun! replant#handle#insert_top_level_messages(qfs, errors)
     endif
   endfor
 endf
+
+fun! replant#handle#quickfix_resources_list(msgs)
+  let msg = a:msgs[0]
+  let qfs = []
+
+  for resource in get(msg, 'resources-list', [])
+    let d = {}
+
+    let d.filename = fnamemodify(resource.file, ':~:.')
+    let d.text = resource.relpath
+
+    call add(qfs, d)
+  endfor
+
+  return qfs
+endf

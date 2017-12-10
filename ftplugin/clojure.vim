@@ -30,3 +30,4 @@ endfunction
 command! -buffer -nargs=0 ReplantFindSymbol call replant#ui#find_symbol_under_cursor_quickfix()
 
 command! -buffer -nargs=* -range=0 ReplantHotloadDependency call replant#ui#hotload_command(<line1>, <line2>, <f-args>)
+command! -buffer -nargs=0 ReplantListResources call replant#ui#quickfix_resources_list()

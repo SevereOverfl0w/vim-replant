@@ -60,6 +60,7 @@ Plug 'tpope/vim-fireplace'
 ** [ ] Async quickfix
 * [*] Hotload dependencies
 * [*] Auto-insertion of (ns) for new files.
+* [*] List resources (classpath files which aren't source code), and jump to their real location
 
 === Refresh
 
@@ -78,6 +79,12 @@ They quickfix window will open automatically after this, if there are any matche
 `:ReplantHotloadDependency aero 1.1.2` will hotload a named dependency into the current JVM.
 
 `<range>:ReplantHotloadDependency` will hotload a dependency in leiningen coordinate style into the current JVM. Intended for use with vim-sexp like `vaf:ReplantHotloadDependency` when on the coordinate.
+
+=== List resources
+
+You can list resources with `:ReplantListResources`.
+This will open a quickfix buffer with the real location set, and the relative classpath location as the description.
+Resources, as defined by cider-nrepl, are all files on the classpath excluding source files & META-INF.
 
 == Developing
 
