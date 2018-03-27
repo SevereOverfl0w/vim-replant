@@ -1,6 +1,6 @@
 (some identity
   (for [potential-dev-ns ['user 'dev 'boot.user]
-        potential-fn ['stop]]
+        potential-fn ['stop 'halt]]
     (do
       (try (require potential-dev-ns)
            (catch Exception _))
