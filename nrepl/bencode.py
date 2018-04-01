@@ -19,6 +19,7 @@ except ImportError:
 import sys
 from io import BytesIO
 import array
+import numbers
 
 # Some code so we can use different features without worrying about versions.
 PY2 = sys.version_info[0] == 2
@@ -40,7 +41,7 @@ def _read_int(s, terminator=None, init_data=None):
     int_chrs = init_data or []
     while True:
         c = _read_byte(s)
-        if not c.isdigit() or c == terminator or not c:
+        if not (c.isdigit() or c == b'-') or c == terminator or not c:
             break
         else:
             int_chrs.append(c)
@@ -109,7 +110,7 @@ def _write_datum(x, out):
         out.write(str(len(x.encode('utf-8'))).encode('utf-8'))
         out.write(b":")
         out.write(x.encode('utf-8'))
-    elif isinstance(x, int):
+    elif isinstance(x, numbers.Integral):
         out.write(b"i")
         out.write(str(x).encode('utf-8'))
         out.write(b"e")

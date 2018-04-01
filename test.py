@@ -6,6 +6,9 @@ import nrepl
 from collections import OrderedDict
 from nrepl.bencode import encode, decode
 
+from hypothesis import given, reproduce_failure
+import hypothesis.strategies as st
+
 import sys
 PY2 = sys.version_info[0] == 2
 if not PY2:
@@ -19,7 +22,7 @@ class BencodeTest (unittest.TestCase):
         # Python3 treats dicts differently. For the sake of testing we use a
         # ordered dict so the order does not change.
         test_values = OrderedDict((("a", 1), ("b", [2, [3]]), ("c", [{"x": ["y"]}])))
-        
+
         self.assertEqual('d1:ai1e1:bli2eli3eee1:cld1:xl1:yeeee',
                 encode(test_values))
         self.assertEqual([{u'a': 1, u'c': [{u'x': [u'y']}], u'b': [2, [3]]}],
@@ -34,6 +37,33 @@ class BencodeTest (unittest.TestCase):
     def test_unicode_string(self):
         self.assertEqual([u'á'], list(decode(u'2:á')))
         self.assertEqual(u'2:á', encode(u'á'))
+
+def bencode_primitives():
+    return st.one_of(st.integers(), st.text())
+
+bencode = st.recursive(st.integers() | st.text(),lambda children: st.lists(children) | st.dictionaries(st.text(), children))
+
+class GenerativeBencodeTest(unittest.TestCase):
+    @given(st.integers())
+    def test_integers(self, i):
+        self.assertEqual(i, next(decode(encode(i))))
+
+    @given(st.text())
+    def test_integers(self, s):
+        self.assertEqual(s, next(decode(encode(s))))
+
+    @given(st.recursive(bencode_primitives(), st.lists))
+    def test_lists(self, l):
+        self.assertEqual(l, next(decode(encode(l))))
+
+    @given(st.dictionaries(bencode_primitives(), bencode_primitives()))
+    def test_dicts(self, d):
+        self.assertEqual(d, next(decode(encode(d))))
+
+    @given(bencode)
+    def test_x(self, x):
+        self.assertEqual(x, next(decode(encode(x))))
+
 
 class REPLTest (unittest.TestCase):
     def setUp (self):
