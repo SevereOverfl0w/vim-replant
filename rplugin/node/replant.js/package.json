@@ -1,0 +1,12 @@
+{
+  "name": "replant",
+  "version": "0.0.0",
+  "description": "Replant Neovim plugin",
+  "main": "replant.js",
+  "license": "MPLv2",
+  "dependencies": {
+    "bencode": "^2.0.0",
+    "streaming-bencode2": "^1.0.0",
+    "uuid": "^3.2.1"
+  }
+}
