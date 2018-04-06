@@ -27,7 +27,7 @@ fun! replant#handle#hotload(cmsg)
   endif
 endf
 
-fun! replant#handle#stacktraces(qfs, stacktraces)
+fun! replant#handle#stacktrace_qf(qfs, stacktraces)
   for stacktrace in a:stacktraces
     let d = {}
     let d.lnum = stacktrace['line']

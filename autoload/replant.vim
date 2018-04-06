@@ -152,7 +152,7 @@ fun! replant#handle_plain_stack(error)
   call reverse(a:error)
   for e in a:error
     if has_key(e, 'stacktrace')
-      call replant#handle#stacktraces(qfs, e.stacktrace)
+      call replant#handle#stacktrace_qf(qfs, e.stacktrace)
     endif
   endfor
 
