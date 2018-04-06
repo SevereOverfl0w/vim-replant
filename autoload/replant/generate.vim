@@ -42,3 +42,10 @@ endf
 fun! replant#generate#resource_list()
   return {'op': 'resources-list'}
 endf
+
+fun! replant#generate#last_stacktrace()
+  let msg = {'op': 'stacktrace',
+           \ 'session': get(get(fireplace#client(), 'connection', {}), 'session')}
+
+  return msg
+endf

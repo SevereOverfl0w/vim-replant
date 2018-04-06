@@ -38,7 +38,11 @@ fun! replant#handle#stacktrace_qf(qfs, stacktraces)
       let file = replant#url_to_vim(stacktrace['file-url'])
       let d.filename = fnamemodify(file, ':~:.')
     else
-      let d.text = '['.get(stacktrace, 'file').'] '.d.text
+      " Emacs-ism, ugh. It returns [] for "nil", like, wtf?
+      let f = get(stacktrace, 'file')
+      if type(f) == v:t_string
+        let d.text = '['.f.'] '.d.text
+      endif
     endif
 
     let d.text .= ' '.join(map(stacktrace['flags'], {idx, val -> '#'.val}), ' ')

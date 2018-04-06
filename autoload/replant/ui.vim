@@ -62,3 +62,22 @@ fun! replant#ui#quickfix_resources_list()
   call setqflist(qfs)
   copen
 endf
+
+fun! replant#ui#last_stacktrace()
+  let send = replant#generate#last_stacktrace()
+  let msgs = replant#send#message(send)
+
+  let qfs = []
+
+  call reverse(msgs)
+  for e in msgs
+    if has_key(e, 'stacktrace')
+      call replant#handle#stacktrace_qf(qfs, e.stacktrace)
+    endif
+  endfor
+
+  call replant#handle#insert_top_level_messages(qfs, msgs)
+
+  call setloclist(0, qfs)
+  lopen
+endf
