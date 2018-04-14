@@ -162,6 +162,146 @@ fun! replant#handle_plain_stack(error)
   lopen
 endf
 
+fun! replant#hl_state_to_group(state)
+  let name = ''
+
+  if get(a:state, 'fg') isnot 0
+    let name .= 'fg'.get(a:state, 'fg')
+  endif
+
+  if get(a:state, 'bg') isnot 0
+    let name .= 'bg'.get(a:state, 'bg')
+  endif
+
+  if get(a:state, 'attrs', {}) != {}
+    let name .= 'attrs'.join(sort(keys(get(a:state, 'attrs'))), '')
+  endif
+
+  if name == ''
+    return 'None'
+  else
+    let name = 'REPLANT_ANSI_HL_'.name
+  endif
+
+  let cmd = 'hi '.name
+
+  if get(a:state, 'fg') isnot 0
+    let fg = get(a:state, 'fg')
+    let cmd .= ' ctermfg='.fg.' guifg='.fg
+  endif
+
+  if get(a:state, 'bg') isnot 0
+    let bg = get(a:state, 'bg')
+    let cmd .= ' ctermbg='.bg.' guibg='.bg
+  endif
+
+  if get(a:state, 'attrs', {}) != {}
+    let attrs = join(sort(keys(get(a:state, 'attrs'))), ',')
+    let cmd .= ' cterm='.attrs.' gui='.attrs
+  endif
+
+  execute cmd
+
+  return name
+endf
+
+fun! replant#hl_state_update(state, escape)
+  let x = a:escape
+
+  if !has_key(a:state, 'attrs')
+    let a:state['attrs'] = {}
+  endif
+
+  if x == '[m' || x == '[0m'
+    " Reset everything
+    let a:state['fg'] = 0
+    let a:state['bg'] = 0
+    let a:state['attrs'] = {}
+    return a:state
+  else
+    let tokens = split(matchstr(x, '\e[\zs\(\d\+;\?\)\+\zem'), ';')
+
+    for token in tokens
+      " Attrs
+      if token == 0
+        let a:state['fg'] = 0
+        let a:state['bg'] = 0
+        let a:state['attrs'] = {}
+      elseif token == 1
+        let a:state['attrs']['bold'] = 1
+      " vim doesn't support faint/dim
+      " elseif token == 2
+      "   let a:state['attrs']['Dim'] = 1
+      elseif token == 3
+        let a:state['attrs']['italic'] = 1
+      elseif token == 4
+        let a:state['attrs']['underline'] = 1
+      elseif token == 7
+        let a:state['attrs']['reverse'] = 1
+      " FG
+      elseif token == 30
+        let a:state['fg'] = 'black'
+      elseif token == 31
+        let a:state['fg'] = 'red'
+      elseif token == 32
+        let a:state['fg'] = 'green'
+      elseif token == 33
+        let a:state['fg'] = 'yellow'
+      elseif token == 34
+        let a:state['fg'] = 'blue'
+      elseif token == 35
+        let a:state['fg'] = 'magenta'
+      elseif token == 36
+        let a:state['fg'] = 'cyan'
+      elseif token == 37
+        let a:state['fg'] = 'white'
+
+        " BG
+      elseif token == 40
+        let a:state['bg'] = 'black'
+      elseif token == 41
+        let a:state['bg'] = 'red'
+      elseif token == 42
+        let a:state['bg'] = 'green'
+      elseif token == 43
+        let a:state['bg'] = 'yellow'
+      elseif token == 44
+        let a:state['bg'] = 'blue'
+      elseif token == 45
+        let a:state['bg'] = 'magenta'
+      elseif token == 46
+        let a:state['bg'] = 'cyan'
+      elseif token == 47
+        let a:state['bg'] = 'white'
+      endif
+    endfor
+
+    return a:state
+endf
+
+fun! replant#echohl_ansi(string, state)
+  let escape_re = '\(\(\e\[\(\d\+;\?\)\+m\)\|\e\[m\)'
+  let magic_str = 'REPLANT_DELIM'
+
+  for x in split(substitute(a:string, escape_re, magic_str.'\0'.magic_str, 'g'), magic_str)
+    if x =~# escape_re
+      let state = replant#hl_state_update(a:state, x)
+      let group = replant#hl_state_to_group(a:state)
+
+      execute 'echohl '.group
+    else
+      echon x
+    endif
+  endfor
+
+  echohl None
+
+  return a:state
+endf
+
+let s:handle_refresh_state = {}
+let s:handle_refresh_last_is_out = {}
+
 fun! replant#handle_refresh_msg(msg)
   if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoking-before')
     echom '('.a:msg['before'].')'
@@ -174,8 +314,14 @@ fun! replant#handle_refresh_msg(msg)
   elseif has_key(a:msg, 'status') && s:contains(a:msg['status'], 'invoked-after')
     echom '… Done!'
   elseif has_key(a:msg, 'out')
-    echo a:msg.out
+    if !get(s:handle_refresh_last_is_out, a:msg.id)
+      echon "\n"
+    endif
+
+    let s:handle_refresh_state[a:msg.id] = replant#echohl_ansi(a:msg.out, get(s:handle_refresh_state, a:msg.id, {}))
   endif
+
+  let s:handle_refresh_last_is_out[a:msg.id] = has_key(a:msg, 'out')
 
   if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'error')
     call replant#handle_plain_stack(a:msg['error'])
