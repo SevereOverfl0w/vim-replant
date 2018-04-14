@@ -123,7 +123,7 @@ They run tests, and produce a test report.
 
 .`test-all` parameters
 [horizontal]
-`load?`:: Set to any value (I prefer `1`) if this hsould load namespaces (`require` them) or just use the already loaded ones.
+`load?`:: Set to any value (I prefer `1`) if this should load namespaces (`require` them) or just use the already loaded ones.
 
 `retest` re-runs all the tests that failed in the last run of `test` or `test-all`.
 It takes no parameters.
