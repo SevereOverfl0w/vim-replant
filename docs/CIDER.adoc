@@ -118,8 +118,11 @@ They run tests, and produce a test report.
 
 .`test` parameters
 [horizontal]
-`ns`:: Current namespace for which user believes themselves in. Used for looking up test vars.
-`tests`:: A list of vars which to test.
+`ns`:: Namespace to run tests for.
+`tests`::
+A list of vars to test.
+If not supplied, then all tests for the current `ns` will be run.
+If supplied, should be a list of strings, which will be resolved within the `ns` parameter.
 `selector`:: Filter vars to only those where `(keyword "selector")` resolves to true in the metadata. e.g. if the var was defined with `^:foobar` then a selector of `"foobar"` would run this test.
 
 .`test-all` parameters
