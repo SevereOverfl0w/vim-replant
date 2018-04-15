@@ -90,9 +90,17 @@ fun! replant#handle#quickfix_resources_list(msgs)
   return qfs
 endf
 
+fun! replant#handle#find_test_results_msg(msgs)
+  for x in a:msgs
+    if has_key(x, 'results')
+      return x
+    endif
+  endfor
+endf
+
 fun! replant#handle#test_summary(msgs)
-  let result_msg = a:msgs[0]
-  let status_msg = a:msgs[1]
+  let result_msg = replant#handle#find_test_results_msg(a:msgs)
+  let status_msg = a:msgs[-1]
   let summary = get(result_msg, 'summary', {})
 
   echo 'Tested '.get(summary, 'ns').' namespaces'
@@ -115,8 +123,8 @@ fun! replant#handle#test_summary(msgs)
 endf
 
 fun! replant#handle#test_add_to_qf(qfs, msgs)
-  let result_msg = a:msgs[0]
-  let status_msg = a:msgs[1]
+  let result_msg = replant#handle#find_test_results_msg(a:msgs)
+  let status_msg = a:msgs[-1]
   let results = get(result_msg, 'results', {})
 
   let qfs = a:qfs
@@ -190,8 +198,8 @@ fun! replant#handle#test_add_to_qf(qfs, msgs)
 endf
 
 fun! replant#handle#test_fix_file(info_msgs, msgs)
-  let result_msg = a:msgs[0]
-  let status_msg = a:msgs[1]
+  let result_msg = replant#handle#find_test_results_msg(a:msgs)
+  let status_msg = a:msgs[-1]
   let results = get(result_msg, 'results', {})
 
   for infos in a:info_msgs
@@ -206,8 +214,8 @@ fun! replant#handle#test_fix_file(info_msgs, msgs)
 endf
 
 fun! replant#handle#is_tests_pass(msgs)
-  let result_msg = a:msgs[0]
-  let status_msg = a:msgs[1]
+  let result_msg = replant#handle#find_test_results_msg(a:msgs)
+  let status_msg = a:msgs[-1]
   let summary = get(result_msg, 'summary', {})
 
   return (get(summary, 'fail') + get(summary, 'error')) == 0
