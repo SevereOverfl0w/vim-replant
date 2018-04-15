@@ -11,15 +11,13 @@ replant (v.)
 Plant (a tree or plant that has been dug up) again, especially when transferring it to a larger pot or new site.
 ____
 
-I accept link:https://github.com/clojure-emacs[clojure-emacs]'footnote:[Only *-nrepl though, of course. The emacs part is just crazy] hard work as necessary to have nice things.
+This plugin is an attempt to _extend_ the current Clojure/vim ecosystem.
+It works with fireplace to add and augment features.
+In the future it may replace fireplace, or also use other backends.
+
+link:https://github.com/clojure-emacs[clojure-emacs] have done amazing work to ensure CIDER is usable by other editors.
 I wish to have more features in vim, and I'm willing to accept coupling to more nrepl middleware for it.
-I'm a Neovim user, so would like to take advantage of new APIs to make developing vim plugins more powerful, or easy.
-
-With that in mind, here's the tentative list of potential requirements for this plugin:
-
-* Neovim
-* link:https://github.com/clojure-emacs/cider-nrepl[CIDER-nrepl]
-* link:https://github.com/clojure-emacs/refactor-nrepl[refactor-nrepl] (probably optional)
+I'm a Neovim user, so would like to take advantage of new APIs to make developing vim plugins easier or with more features.
 
 [IMPORTANT]
 ====
@@ -45,6 +43,11 @@ Currentlyfootnote:[One day I'd like to do this in lua or with a cross-platform G
 Plug 'SevereOverfl0w/vim-replant', { 'do': ':UpdateRemotePlugins' }
 Plug 'tpope/vim-fireplace'
 ----
+
+Then add the following projects as middleware to your project.
+
+* link:https://github.com/clojure-emacs/cider-nrepl[CIDER-nrepl]
+* link:https://github.com/clojure-emacs/refactor-nrepl[refactor-nrepl]
 
 == Features
 
