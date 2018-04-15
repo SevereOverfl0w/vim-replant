@@ -89,3 +89,126 @@ fun! replant#handle#quickfix_resources_list(msgs)
 
   return qfs
 endf
+
+fun! replant#handle#test_summary(msgs)
+  let result_msg = a:msgs[0]
+  let status_msg = a:msgs[1]
+  let summary = get(result_msg, 'summary', {})
+
+  echo 'Tested '.get(summary, 'ns').' namespaces'
+  echo 'Ran '.get(summary, 'test').' assertions, in '.get(summary, 'var').' test functions'
+
+  if get(summary, 'fail')
+    echohl WarningMsg
+    echo get(summary, 'fail').' failures'
+  endif
+
+  if get(summary, 'error')
+    echohl ErrorMsg
+    echo get(summary, 'error').' errors'
+  endif
+
+  echohl DiffAdd
+  echo get(summary, 'pass').' passed'
+
+  echohl None
+endf
+
+fun! replant#handle#test_add_to_qf(qfs, msgs)
+  let result_msg = a:msgs[0]
+  let status_msg = a:msgs[1]
+  let results = get(result_msg, 'results', {})
+
+  let qfs = a:qfs
+
+  for [ns, vars] in items(results)
+    for [var, assertions] in items(vars)
+      for assertion in assertions
+        if get(assertion, 'type') != 'pass'
+
+          let Add_text = {text -> add(qfs, {'text': text})}
+
+          let qf = {}
+
+          let qf['text'] = get(assertion, 'ns').'/'.get(assertion, 'var')
+          let qf['lnum'] = get(assertion, 'line')
+          let qf['nr'] = get(assertion, 'index')
+
+          if has_key(assertion, 'file-url') && type(assertion['file-url']) == v:t_string
+            let qf.filename = replant#url_to_vim(assertion['file-url'])
+          endif
+
+          if get(assertion, 'type') == 'error'
+            let qf['type'] = 'E'
+          elseif get(assertion, 'type') == 'fail'
+            let qf['type'] = 'W'
+          endif
+
+          call add(qfs, qf)
+
+          if has_key(assertion, 'context') && type(assertion['context']) == v:t_string
+            call Add_text('Testing '.assertion['context'])
+          endif
+
+          if has_key(assertion, 'expected')
+            call Add_text('expected')
+            call Add_text(get(assertion, 'expected'))
+          endif
+
+          if get(assertion, 'diffs', []) != []
+            let diffs = get(assertion, 'diffs')
+            for [actual, change] in diffs
+              let [removed, added] = change
+              call Add_text('actual')
+              call Add_text(actual)
+              call Add_text('diff')
+              call Add_text('- '.removed)
+              call Add_text('+ '.added)
+            endfor
+          else
+            if has_key(assertion, 'actual') && type(assertion['actual']) == v:t_string
+              call Add_text('actual')
+              call Add_text(assertion['actual'])
+            endif
+          endif
+
+          if has_key(assertion, 'error')
+            call Add_text('exception message')
+            call Add_text(get(assertion, 'error'))
+
+            call Add_text('To inspect stacktrace, run: :ReplantTestStacktrace '.get(assertion, 'ns').' '.get(assertion, 'var').' '.get(assertion, 'index'))
+          endif
+
+          if has_key(assertion, 'gen-input')
+            call Add_text('input')
+            call Add_text(get(assertion, 'gen-input'))
+          endif
+        endif
+      endfor
+    endfor
+  endfor
+endf
+
+fun! replant#handle#test_fix_file(info_msgs, msgs)
+  let result_msg = a:msgs[0]
+  let status_msg = a:msgs[1]
+  let results = get(result_msg, 'results', {})
+
+  for infos in a:info_msgs
+    for info in infos
+      if has_key(info, 'file')
+        for assertion in results[info['ns']][info['name']]
+          let assertion['file-url'] = info['file']
+        endfor
+      endif
+    endfor
+  endfor
+endf
+
+fun! replant#handle#is_tests_pass(msgs)
+  let result_msg = a:msgs[0]
+  let status_msg = a:msgs[1]
+  let summary = get(result_msg, 'summary', {})
+
+  return (get(summary, 'fail') + get(summary, 'error')) == 0
+endf

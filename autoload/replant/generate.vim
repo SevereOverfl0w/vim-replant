@@ -49,3 +49,36 @@ fun! replant#generate#last_stacktrace()
 
   return msg
 endf
+
+fun! replant#generate#test_project(args)
+  let opts = a:args
+
+  if get(a:args, 'load?')
+    let opts['load?'] = 1
+  endif
+
+  let msg = extend({'op': 'test-all'}, opts)
+
+  return msg
+endf
+
+fun! replant#generate#test_results_info(msgs)
+  let result_msg = a:msgs[0]
+  let status_msg = a:msgs[1]
+  let results = get(result_msg, 'results', {})
+
+  let msgs = []
+
+  for [ns, vars] in items(results)
+    for [var, assertions] in items(vars)
+      " TODO: Filter to only where an assertion didn't pass
+      call add(msgs, {'op': 'info', 'ns': 'clojure.core', 'symbol': ns.'/'.var})
+    endfor
+  endfor
+
+  return msgs
+endf
+
+fun! replant#generate#test_stacktrace(ns,var,index)
+  return {'op': 'test-stacktrace', 'ns': a:ns, 'var': a:var, 'index': a:index}
+endf

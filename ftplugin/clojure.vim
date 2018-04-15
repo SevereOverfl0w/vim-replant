@@ -33,3 +33,7 @@ command! -buffer -nargs=* -range=0 ReplantHotloadDependency call replant#ui#hotl
 command! -buffer -nargs=0 ReplantListResources call replant#ui#quickfix_resources_list()
 
 command! -buffer -nargs=0 ReplantLastStacktrace call replant#ui#last_stacktrace()
+
+command! -buffer -nargs=* ReplantTestProject call replant#ui#test_project(<f-args>)
+nnoremap <silent><buffer> <localleader>rtp :<C-U>call replant#ui#test_project()<CR>
+command! -buffer -nargs=+ ReplantTestStacktrace call replant#ui#test_stacktrace(<f-args>)

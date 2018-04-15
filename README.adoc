@@ -61,6 +61,7 @@ Plug 'tpope/vim-fireplace'
 * [*] Hotload dependencies
 * [*] Auto-insertion of (ns) for new files.
 * [*] List resources (classpath files which aren't source code), and jump to their real location
+* [*] Test runner
 
 === Refresh
 
@@ -85,6 +86,19 @@ They quickfix window will open automatically after this, if there are any matche
 You can list resources with `:ReplantListResources`.
 This will open a quickfix buffer with the real location set, and the relative classpath location as the description.
 Resources, as defined by cider-nrepl, are all files on the classpath excluding source files & META-INF.
+
+=== Test Runner
+
+You can run project tests with `:ReplantTestProject`, which takes these arguments:
+
+`-load`:: Automatically load project namespaces if they are unloaded (default)
+`-no-load`:: Do not automatically load project namespaces
+`-selector=selector`:: Filter to tests with the metadata "selector" on them.
+
+Sometimes tests throw an exception, you can use the full power of the tagged stacktrace explorer with tests.
+A command will be conveniently provided to you in the form `:ReplantTestStacktrace ns var nr`.
+You *must switch to a clojure buffer to run this*.
+It will fetch the stacktrace information, and load it into the quickfix window.
 
 == Developing
 

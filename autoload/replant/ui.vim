@@ -81,3 +81,62 @@ fun! replant#ui#last_stacktrace()
   call setloclist(0, qfs)
   lopen
 endf
+
+fun! replant#ui#test_project(...)
+  let opts = {'load?': 1}
+
+  for x in a:000
+    if x ==# '-no-load'
+      let opts['load?'] = 0
+    elseif x ==# '-load'
+      let opts['load?'] = 1
+    elseif x =~# '^-selector='
+      let opts['selector'] = matchstr(x, '-selector=\zs.*')
+    endif
+  endfor
+
+  let send = replant#generate#test_project(opts)
+  let msgs = replant#send#message(send)
+
+  let info_ops = replant#generate#test_results_info(msgs)
+
+  let info_msgs = []
+
+  for info_op in info_ops
+    call add(info_msgs, replant#send#message(info_op))
+  endfor
+
+  call replant#handle#test_fix_file(info_msgs, msgs)
+
+  let qfs = []
+  call replant#handle#test_add_to_qf(qfs, msgs)
+  call setqflist(qfs)
+
+  " copen before echo'ing the summary, else the UI goes weird and the echo is
+  " lost.
+  if !replant#handle#is_tests_pass(msgs)
+    copen
+  endif
+
+  call replant#handle#test_summary(msgs)
+endf
+
+fun! replant#ui#test_stacktrace(ns, var, index)
+  let send = replant#generate#test_stacktrace(a:ns, a:var, str2nr(a:index))
+  let msgs = replant#send#message(send)
+
+  " TODO: Bail if there's no error
+  let qfs = []
+
+  call reverse(msgs)
+  for e in msgs
+    if has_key(e, 'stacktrace')
+      call replant#handle#stacktrace_qf(qfs, e.stacktrace)
+    endif
+  endfor
+
+  call replant#handle#insert_top_level_messages(qfs, msgs)
+
+  call setqflist(qfs)
+  copen
+endf
