@@ -120,17 +120,45 @@ They run tests, and produce a test report.
 [horizontal]
 `ns`:: Current namespace for which user believes themselves in. Used for looking up test vars.
 `tests`:: A list of vars which to test.
+`selector`:: Filter vars to only those where `(keyword "selector")` resolves to true in the metadata. e.g. if the var was defined with `^:foobar` then a selector of `"foobar"` would run this test.
 
 .`test-all` parameters
 [horizontal]
 `load?`:: Set to any value (I prefer `1`) if this should load namespaces (`require` them) or just use the already loaded ones.
+`selector`:: Filter vars to only those where `(keyword "selector")` resolves to true in the metadata. e.g. if the var was defined with `^:foobar` then a selector of `"foobar"` would run this test.
 
 `retest` re-runs all the tests that failed in the last run of `test` or `test-all`.
 It takes no parameters.
 It returns a test report also.
 
 .Test report format
-_To be written_
+____
+A map containg the keys:
+
+[horizontal]
+`summary`:: A summary of pass/failures, with a breakdown by category
+`results`:: A <<results-map>> describing failures in details
+`testing-ns`:: ???
+`gen-input`:: ???
+
+[[results-map]]
+_____
+A map of namespace to map of vars.
+The map of vars is a list of maps.
+The list of maps contains information about the success/failures inside of that test.
+
+
+.Basic form
+----
+{'my-api'
+ {'my-var': []}}
+----
+
+WARNING: I have not yet documented the assertions.
+
+_____
+
+____
 
 `test-stacktrace` is a useful op for using CIDER's stacktrace functionality to inspect a stacktrace that happens during a test.
 
