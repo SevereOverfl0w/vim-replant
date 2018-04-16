@@ -63,7 +63,8 @@ fun! replant#generate#test_project(args)
 endf
 
 fun! replant#generate#test_results_info(msgs)
-  let result_msg = a:msgs[0]
+  " TODO: Refactor the find_test_result_msg out
+  let result_msg = replant#handle#find_test_results_msg(a:msgs)
   let status_msg = a:msgs[1]
   let results = get(result_msg, 'results', {})
 
