@@ -59,6 +59,13 @@ fun! replant#ui#quickfix_resources_list()
   let send = replant#generate#resource_list()
   let msgs = replant#send#message(send)
   let qfs = replant#handle#quickfix_resources_list(msgs)
+
+  if exists("*fzf#run")
+    let resources = map(qfs, 'v:val.filename')
+    call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': resources}, 'right:hidden', '?')))
+    return
+  endif
+
   call setqflist(qfs)
   copen
 endf
