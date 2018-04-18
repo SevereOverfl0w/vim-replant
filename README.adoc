@@ -31,7 +31,7 @@ That will leave you with you with a broken plant.
 
 All input is welcome!
 Feel free to open issues for questions & feature requests.
-I am available on link:http://clojurians.net/[Clojurians Slack] in either #vim-fireplace or as dominicm.
+I am available on link:http://clojurians.net/[Clojurians Slack] in either #vim or as dominicm.
 
 == Install
 
