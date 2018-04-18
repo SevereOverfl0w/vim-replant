@@ -14,8 +14,7 @@ fun! replant#handle#quickfix_find_symbol(msgs)
       return 0
     endif
   endfor
-
-  call setqflist(qfs)
+  return qfs
 endf
 
 fun! replant#handle#hotload(cmsg)

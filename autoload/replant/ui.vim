@@ -6,12 +6,56 @@ fun! replant#ui#refresh_all()
   call replant#send#message_callback(replant#generate#refresh_all(), 'replant#handle_refresh_msg')
 endf
 
+fun! replant#ui#string_to_qf(line, delimeter)
+  let parts = split(a:line, a:delimeter)
+  return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
+        \ 'text': join(parts[3:], a:delimeter)}
+endf
+
+fun! replant#ui#qf_to_string(qf, delimeter)
+  let parts = [a:qf.filename, a:qf.lnum, a:qf.col, split(a:qf.text, '\n')[0]]
+  return join(parts, a:delimeter)
+endf!
+
+fun! replant#ui#fzf_handler(lines)
+  if len(a:lines) < 2 | return | endif
+
+  let cmd = get({'ctrl-x': 'split',
+               \ 'ctrl-v': 'vertical split',
+               \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
+  let list = map(a:lines[1:], 'replant#ui#string_to_qf(v:val, ":")')
+
+  let first = list[0]
+  execute cmd escape(first.filename, ' %#\')
+  execute first.lnum
+  execute 'normal!' first.col.'|zz'
+
+  if len(list) > 1
+    call setqflist(list)
+    copen
+    wincmd p
+  endif
+endfunction
+
 fun! replant#ui#find_symbol_under_cursor_quickfix()
   let msg = replant#generate#find_symbol_under_cursor()
   if msg isnot 0
-    call replant#handle#quickfix_find_symbol(replant#send#message(msg))
+    let qfs = replant#handle#quickfix_find_symbol(replant#send#message(msg))
+    if exists("*fzf#vim#with_preview")
+      let resources = map(qfs, 'replant#ui#qf_to_string(v:val, ":")')
+      call fzf#run(fzf#wrap(fzf#vim#with_preview({
+                  \ 'source': resources,
+                  \ 'sink*': function('replant#ui#fzf_handler'),
+                  \ 'options': '--expect=ctrl-t,ctrl-v,ctrl-x '.
+                  \            '--color --multi --bind=ctrl-a:select-all,ctrl-d:deselect-all ',
+                  \ }, 'right', '?')))
+      return
+    endif
+
     " TODO: Consider triggering an autocmd that vim-qf can respond to here, in
     " order to be less opinionated
+    "
+    call setqflist(qfs)
     cwindow
   endif
 endf
