@@ -62,6 +62,18 @@ fun! replant#generate#test_project(args)
   return msg
 endf
 
+fun! replant#generate#retest_project(args)
+  let opts = a:args
+
+  if get(a:args, 'load?')
+    let opts['load?'] = 1
+  endif
+
+  let msg = extend({'op': 'retest'}, opts)
+
+  return msg
+endf
+
 fun! replant#generate#test_results_info(msgs)
   " TODO: Refactor the find_test_result_msg out
   let result_msg = replant#handle#find_test_results_msg(a:msgs)
