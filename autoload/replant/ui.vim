@@ -133,21 +133,8 @@ fun! replant#ui#last_stacktrace()
   lopen
 endf
 
-fun! replant#ui#test_project(...)
-  let opts = {'load?': 1}
-
-  for x in a:000
-    if x ==# '-no-load'
-      let opts['load?'] = 0
-    elseif x ==# '-load'
-      let opts['load?'] = 1
-    elseif x =~# '^-selector='
-      let opts['selector'] = matchstr(x, '-selector=\zs.*')
-    endif
-  endfor
-
-  let send = replant#generate#test_project(opts)
-  let msgs = replant#send#message(send)
+fun! replant#ui#handle_test(msg)
+  let msgs = replant#send#message(a:msg)
 
   let info_ops = replant#generate#test_results_info(msgs)
 
@@ -170,6 +157,36 @@ fun! replant#ui#test_project(...)
   endif
 
   call replant#handle#test_summary(msgs)
+endf
+
+fun! replant#ui#test_project(...)
+  let opts = {'load?': 1}
+
+  for x in a:000
+    if x ==# '-no-load'
+      let opts['load?'] = 0
+    elseif x ==# '-load'
+      let opts['load?'] = 1
+    elseif x =~# '^-selector='
+      let opts['selector'] = matchstr(x, '-selector=\zs.*')
+    endif
+  endfor
+
+  call replant#ui#handle_test(replant#generate#test_project(opts))
+endf
+
+fun! replant#ui#retest_project(...)
+  let opts = {'load?': 1}
+
+  for x in a:000
+    if x ==# '-no-load'
+      let opts['load?'] = 0
+    elseif x ==# '-load'
+      let opts['load?'] = 1
+    endif
+  endfor
+
+  call replant#ui#handle_test(replant#generate#retest_project(opts))
 endf
 
 fun! replant#ui#test_stacktrace(ns, var, index)
