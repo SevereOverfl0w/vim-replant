@@ -77,7 +77,6 @@ endf
 fun! replant#generate#test_results_info(msgs)
   " TODO: Refactor the find_test_result_msg out
   let result_msg = replant#handle#find_test_results_msg(a:msgs)
-  let status_msg = a:msgs[1]
   let results = get(result_msg, 'results', {})
 
   let msgs = []
