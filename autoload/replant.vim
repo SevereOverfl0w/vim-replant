@@ -14,7 +14,7 @@ fun! replant#doc_msg(ns, symbol)
 endf
 
 fun! s:contains(ls, v)
-  replant#util#contains(a:ls, a:v)
+  return replant#util#contains(a:ls, a:v)
 endf
 
 fun! replant#doc(doc_mc)
