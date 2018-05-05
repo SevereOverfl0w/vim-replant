@@ -176,17 +176,7 @@ fun! replant#ui#test_project(...)
 endf
 
 fun! replant#ui#retest_project(...)
-  let opts = {'load?': 1}
-
-  for x in a:000
-    if x ==# '-no-load'
-      let opts['load?'] = 0
-    elseif x ==# '-load'
-      let opts['load?'] = 1
-    endif
-  endfor
-
-  call replant#ui#handle_test(replant#generate#retest_project(opts))
+  call replant#ui#handle_test(replant#generate#retest_project())
 endf
 
 fun! replant#ui#test_stacktrace(ns, var, index)

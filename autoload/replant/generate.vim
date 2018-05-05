@@ -62,16 +62,8 @@ fun! replant#generate#test_project(args)
   return msg
 endf
 
-fun! replant#generate#retest_project(args)
-  let opts = a:args
-
-  if get(a:args, 'load?')
-    let opts['load?'] = 1
-  endif
-
-  let msg = extend({'op': 'retest'}, opts)
-
-  return msg
+fun! replant#generate#retest_project()
+  return {'op': 'retest'}
 endf
 
 fun! replant#generate#test_results_info(msgs)
