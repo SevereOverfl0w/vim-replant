@@ -118,8 +118,8 @@ It will fetch the stacktrace information, and load it into the quickfix window.
 == Realtime Apropos (Var Search)
 
 `:ReplantApropos` can be used to load up fzf with all vars.
-The standard, kbd:[Ctrl+X], kbd:[Ctrl-V], and kbd:[Ctrl-T] work in the fzf buffer.
-In addition, kbd:[Ctrl-I] will bring up a buffer containing doc information about the symbol.
+The standard, kbd:[Ctrl+X], kbd:[Ctrl+V], and kbd:[Ctrl+T] work in the fzf buffer.
+In addition, kbd:[Ctrl+I] will bring up a buffer containing doc information about the symbol.
 
 NOTE: Special symbols, recognizable by their lack of namespace, do not have a source to jump to.
 
