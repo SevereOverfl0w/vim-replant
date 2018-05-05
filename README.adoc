@@ -1,5 +1,6 @@
 = replant.vim: Regrowing again
 Dominic Monroe <monroef4@googlemail.com>
+:experimental:
 
 // I'm trying one sentence per-line here.
 
