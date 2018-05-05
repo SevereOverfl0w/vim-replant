@@ -167,8 +167,10 @@ fun! replant#ui#test_project(...)
       let opts['load?'] = 0
     elseif x ==# '-load'
       let opts['load?'] = 1
-    elseif x =~# '^-selector='
-      let opts['selector'] = matchstr(x, '-selector=\zs.*')
+    elseif x =~# '^+'
+      let opts['include'] = add(get(opts, 'include', []), matchstr(x, '+\zs.*'))
+    elseif x =~# '^-'
+      let opts['exclude'] = add(get(opts, 'exclude', []), matchstr(x, '-\zs.*'))
     endif
   endfor
 

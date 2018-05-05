@@ -94,9 +94,13 @@ Resources, as defined by cider-nrepl, are all files on the classpath excluding s
 
 You can run project tests with `:ReplantTestProject`, which takes these arguments:
 
+`+selector`:: Include tests with the metadata "selector" on them.
+`-selector`:: Exclude tests with the metadata "selector" on them.
 `-load`:: Automatically load project namespaces if they are unloaded (default)
 `-no-load`:: Do not automatically load project namespaces
-`-selector=selector`:: Filter to tests with the metadata "selector" on them.
+
+Inclusions & exclusions work exactly as link:https://github.com/cognitect-labs/test-runner[cognitect-labs/test-runner] link:https://github.com/cognitect-labs/test-runner#using-inclusions-and-exclusions[inclusions & exclusions].
+They are repeatable a number of times like so: `:ReplantTestProject +integration +unit -member -regression`.
 
 You can conveniently run tests with `<localleader>rtp` too.
 
