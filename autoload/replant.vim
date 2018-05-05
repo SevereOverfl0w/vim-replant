@@ -14,13 +14,7 @@ fun! replant#doc_msg(ns, symbol)
 endf
 
 fun! s:contains(ls, v)
-  for item in a:ls
-    if a:v == item
-      return 1
-    endif
-  endfor
-
-  return 0
+  replant#util#contains(a:ls, a:v)
 endf
 
 fun! replant#doc(doc_mc)

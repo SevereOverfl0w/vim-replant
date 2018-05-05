@@ -86,3 +86,11 @@ endf
 fun! replant#generate#test_stacktrace(ns,var,index)
   return {'op': 'test-stacktrace', 'ns': a:ns, 'var': a:var, 'index': a:index}
 endf
+
+fun! replant#generate#apropos_all()
+  return {'op': 'apropos', 'ns': fireplace#ns(), 'doc?': 1, 'privates?': 1, 'query': '.*'}
+endf
+
+fun! replant#generate#jump_to_source_full_symbol(full_symbol)
+  return {'op': 'info', 'ns': 'clojure.core', 'symbol': a:full_symbol}
+endf

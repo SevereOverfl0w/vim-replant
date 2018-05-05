@@ -65,6 +65,9 @@ Then add the following projects as middleware to your project.
 * [*] Auto-insertion of (ns) for new files.
 * [*] List resources (classpath files which aren't source code), and jump to their real location
 * [*] Test runner
+* [*] Realtime apropos
+** [*] for fzf
+** [ ] for Denite
 
 === Refresh
 
@@ -110,6 +113,20 @@ Sometimes tests throw an exception, you can use the full power of the tagged sta
 A command will be conveniently provided to you in the form `:ReplantTestStacktrace ns var nr`.
 You *must switch to a clojure buffer to run this*.
 It will fetch the stacktrace information, and load it into the quickfix window.
+
+== Realtime Apropos (Var Search)
+
+`:ReplantApropos` can be used to load up fzf with all vars.
+The standard, kbd:[Ctrl+X], kbd:[Ctrl-V], and kbd:[Ctrl-T] work in the fzf buffer.
+In addition, kbd:[Ctrl-I] will bring up a buffer containing doc information about the symbol.
+
+NOTE: Special symbols, recognizable by their lack of namespace, do not have a source to jump to.
+
+WARNING: The doc information is not well tested, and is highly subject to change.
+
+You can control whether doc strings are shown alongside vars by setting `g:replant_apropos_doc` to `1`.
+
+WARNING: I may remove this global flag and change how this is controlled.
 
 == Developing
 

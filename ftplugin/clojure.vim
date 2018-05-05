@@ -38,3 +38,5 @@ command! -buffer -nargs=* ReplantTestProject call replant#ui#test_project(<f-arg
 command! -buffer -nargs=0 ReplantRetestProject call replant#ui#retest_project()
 nnoremap <silent><buffer> <localleader>rtp :<C-U>call replant#ui#test_project()<CR>
 command! -buffer -nargs=+ ReplantTestStacktrace call replant#ui#test_stacktrace(<f-args>)
+
+command! -buffer -nargs=0 ReplantApropos call replant#ui#find_all_symbols()

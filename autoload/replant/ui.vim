@@ -200,3 +200,21 @@ fun! replant#ui#test_stacktrace(ns, var, index)
   call setqflist(qfs)
   copen
 endf
+
+fun! replant#ui#find_all_symbols()
+  let send = replant#generate#apropos_all()
+  let msgs = replant#send#message(send)
+
+  if exists("*fzf#shellescape")
+    call replant#handle#apropos_fzf(msgs)
+  else
+    echoerr 'FZF is required for this functionality'
+  endif
+endf
+
+fun! replant#ui#jump_to_source_full_symbol(edit_cmd, full_symbol)
+  let send = replant#generate#jump_to_source_full_symbol(a:full_symbol)
+  let msgs = replant#send#message(send)
+
+  call replant#handle#info_jump_to_source(a:edit_cmd, msgs)
+endf

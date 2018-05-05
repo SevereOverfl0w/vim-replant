@@ -215,3 +215,41 @@ fun! replant#handle#is_tests_pass(msgs)
 
   return (get(summary, 'fail') + get(summary, 'error')) == 0
 endf
+
+fun! replant#handle#apropos_fzf(msgs)
+  let result = a:msgs[0]
+  let apropos_matches = get(result, 'apropos-matches', [])
+
+  if get(g:, 'replant_apropos_doc')
+    let resources = map(apropos_matches, {idx, x -> x['name'].': '.x['doc']})
+  else
+    let resources = map(apropos_matches, {idx, x -> x['name']})
+  endif
+
+  let actions = {'ctrl-x': ['jump', 'split'],
+               \ 'ctrl-v': ['jump', 'vertical split'],
+               \ 'ctrl-t': ['jump', 'tabe'],
+               \ 'ctrl-i': ['doc', '']}
+
+  let Resolver = {a -> get(actions, a, ['jump', 'edit'])}
+
+  let opts = {'source': resources,
+            \ 'sink*': function('replant#fzf#symbol_jump', [Resolver]),
+            \ 'options': '--expect=ctrl-t,ctrl-v,ctrl-x,ctrl-i'}
+  call fzf#run(fzf#wrap(opts))
+endf
+
+fun! replant#handle#info_jump_to_source(edit_cmd, msgs)
+  let info = a:msgs[0]
+
+  if replant#util#contains(info['status'], 'no-info')
+    echoerr 'No info found'
+    return
+  endif
+
+  let file = replant#url_to_vim(info['file'])
+  let line = info['line']
+  let column = get(info, 'column', 0)
+
+  execute ':'.a:edit_cmd.' +call\ cursor('.line.','.column.') '.file
+endf
