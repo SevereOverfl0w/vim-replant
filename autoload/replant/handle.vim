@@ -235,7 +235,7 @@ fun! replant#handle#apropos_fzf(msgs)
 
   let opts = {'source': resources,
             \ 'sink*': function('replant#fzf#symbol_jump', [Resolver]),
-            \ 'options': '--expect=ctrl-t,ctrl-v,ctrl-x,ctrl-i'}
+            \ 'options': '--expect=ctrl-t,ctrl-v,ctrl-x,ctrl-i --tiebreak=index'}
   call fzf#run(fzf#wrap(opts))
 endf
 
