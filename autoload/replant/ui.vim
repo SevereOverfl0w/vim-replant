@@ -181,6 +181,10 @@ fun! replant#ui#retest_project(...)
   call replant#ui#handle_test(replant#generate#retest_project())
 endf
 
+fun! replant#ui#test_vars(vars)
+  call replant#ui#handle_test(replant#generate#test_vars(a:vars))
+endf
+
 fun! replant#ui#test_stacktrace(ns, var, index)
   let send = replant#generate#test_stacktrace(a:ns, a:var, str2nr(a:index))
   let msgs = replant#send#message(send)

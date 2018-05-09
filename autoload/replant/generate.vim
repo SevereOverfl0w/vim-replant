@@ -66,6 +66,10 @@ fun! replant#generate#retest_project()
   return {'op': 'retest'}
 endf
 
+fun! replant#generate#test_vars(vars)
+  return {'op': 'test-var-query', 'var-query': {'exactly': a:vars}}
+endf
+
 fun! replant#generate#test_results_info(msgs)
   " TODO: Refactor the find_test_result_msg out
   let result_msg = replant#handle#find_test_results_msg(a:msgs)

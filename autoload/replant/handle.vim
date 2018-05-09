@@ -229,13 +229,14 @@ fun! replant#handle#apropos_fzf(msgs)
   let actions = {'ctrl-x': ['jump', 'split'],
                \ 'ctrl-v': ['jump', 'vertical split'],
                \ 'ctrl-t': ['jump', 'tabe'],
-               \ 'ctrl-i': ['doc', '']}
+               \ 'ctrl-i': ['doc', ''],
+               \ 'ctrl-y': ['test', '']}
 
   let Resolver = {a -> get(actions, a, ['jump', 'edit'])}
 
   let opts = {'source': resources,
             \ 'sink*': function('replant#fzf#symbol_jump', [Resolver]),
-            \ 'options': '--expect=ctrl-t,ctrl-v,ctrl-x,ctrl-i --tiebreak=index'}
+            \ 'options': '--expect=ctrl-t,ctrl-v,ctrl-x,ctrl-i,ctrl-y --multi --tiebreak=index'}
   call fzf#run(fzf#wrap(opts))
 endf
 
