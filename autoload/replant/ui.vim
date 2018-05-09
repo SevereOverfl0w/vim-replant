@@ -201,8 +201,24 @@ fun! replant#ui#test_stacktrace(ns, var, index)
   copen
 endf
 
-fun! replant#ui#find_all_symbols()
-  let send = replant#generate#apropos_all()
+fun! replant#ui#apropos(...)
+  let options = call('replant#command_parser#parse_apropos', a:000)
+
+  if empty(options)
+    return
+  endif
+
+  let vq = replant#util#options2varquery(options)
+
+  " Not in options2varquery because this might not be generic enough for other
+  " things, tbd
+  if empty(options['__unknown__'])
+    let vq['search'] = '.*'
+  else
+    let vq['search'] = join(options['__unknown__'])
+  endif
+
+  let send = replant#generate#apropos_var_query(vq)
   let msgs = replant#send#message(send)
 
   if exists("*fzf#shellescape")
