@@ -28,5 +28,13 @@ fun! replant#util#options2varquery(options)
     let vq['test?'] = 1
   endif
 
+  if has_key(o, 'include-meta-key')
+    let vq['include-meta-key'] = get(o, 'include-meta-key')
+  endif
+
+  if has_key(o, 'exclude-meta-key')
+    let vq['exclude-meta-key'] = get(o, 'exclude-meta-key')
+  endif
+
   return vq
 endf

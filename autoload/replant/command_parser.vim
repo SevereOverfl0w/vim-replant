@@ -12,8 +12,19 @@ function! replant#command_parser#add_var_query(parser)
 
   call a:parser.add_argument(
         \ '--private', 'Include private vars in results')
+
   call a:parser.add_argument(
         \ '--test', 'Show only test vars in results')
+
+  call a:parser.add_argument(
+        \ '--include-meta-key',
+        \ 'Include vars where this metadata is truthy',
+        \ {'type': s:A.types.multiple})
+
+  call a:parser.add_argument(
+        \ '--exclude-meta-key',
+        \ 'Include vars with this metadata',
+        \ {'type': s:A.types.multiple})
 endfunction
 
 function! replant#command_parser#get_apropos() abort
