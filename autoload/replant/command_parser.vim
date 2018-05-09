@@ -4,12 +4,12 @@ let s:A = s:V.import('ArgumentParser')
 function! replant#command_parser#add_var_query(parser)
   call a:parser.add_argument(
         \ '--project', 'Only show project namespaces')
-  " See https://github.com/lambdalisue/vital-ArgumentParser/issues/10
-  " call a:parser.add_argument(
-  "       \ '--load-project', {'description': 'Load project namespaces when used with --project',
-  "                         \  'deniable': 1, 'default': 1})
+
   call a:parser.add_argument(
-        \ '--load-project', {'deniable': 1, 'default': 1})
+        \ '--load-project',
+        \ 'Load project namespaces when used with --project',
+        \ {'deniable': 1, 'default': 1})
+
   call a:parser.add_argument(
         \ '--private', 'Include private vars in results')
   call a:parser.add_argument(
