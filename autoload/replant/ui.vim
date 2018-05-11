@@ -205,6 +205,22 @@ fun! replant#ui#test_stacktrace(ns, var, index)
   copen
 endf
 
+fun! replant#ui#test_command_var_query(...)
+  let options = call('replant#command_parser#parse_test', a:000)
+
+  if empty(options)
+    return
+  endif
+
+  let vq = replant#util#options2varquery(options)
+
+  if !empty(options['__unknown__'])
+    let vq['search'] = join(options['__unknown__'])
+  endif
+
+  call replant#ui#handle_test(replant#generate#test_var_query(vq))
+endf
+
 fun! replant#ui#apropos(...)
   let options = call('replant#command_parser#parse_apropos', a:000)
 

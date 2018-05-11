@@ -34,6 +34,7 @@ command! -buffer -nargs=0 ReplantListResources call replant#ui#quickfix_resource
 
 command! -buffer -nargs=0 ReplantLastStacktrace call replant#ui#last_stacktrace()
 
+command! -buffer -nargs=* -complete=customlist,replant#command_parser#complete_test ReplantTest call replant#ui#test_command_var_query(<q-bang>, [<line1>, <line2>], <q-args>)
 command! -buffer -nargs=* ReplantTestProject call replant#ui#test_project(<f-args>)
 command! -buffer -nargs=0 ReplantRetestProject call replant#ui#retest_project()
 nnoremap <silent><buffer> <localleader>rtp :<C-U>call replant#ui#test_project()<CR>

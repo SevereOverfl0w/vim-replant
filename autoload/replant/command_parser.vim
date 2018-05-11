@@ -48,3 +48,25 @@ function! replant#command_parser#complete_apropos(...) abort
   let parser = replant#command_parser#get_apropos()
   return call(parser.complete, a:000, parser)
 endfunction
+
+function! replant#command_parser#get_test() abort
+  if exists('s:test_parser')
+    return s:test_parser
+  endif
+  let s:test_parser = s:A.new({
+        \ 'name': 'ReplantTest',
+        \ 'description': 'Test by query',
+        \})
+  call replant#command_parser#add_var_query(s:test_parser)
+  return s:test_parser
+endfunction
+
+function! replant#command_parser#parse_test(...) abort
+  let parser = replant#command_parser#get_test()
+  return call(parser.parse, a:000, parser)
+endfunction
+
+function! replant#command_parser#complete_test(...) abort
+  let parser = replant#command_parser#get_test()
+  return call(parser.complete, a:000, parser)
+endfunction
