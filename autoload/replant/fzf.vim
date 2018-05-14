@@ -7,7 +7,9 @@ function! replant#fzf#symbol_and_doc_to_map(idx, symbol_and_doc)
 endf
 
 function! replant#fzf#symbol_jump(Action_resolve, argz)
-  echom string(a:argz)
+  if len(a:argz) == 0
+    return
+  endif
   let action_string = a:argz[0]
   let symbols_and_docs = a:argz[1:]
 
