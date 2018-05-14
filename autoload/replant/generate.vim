@@ -92,7 +92,7 @@ fun! replant#generate#test_stacktrace(ns,var,index)
 endf
 
 fun! replant#generate#apropos_var_query(var_query)
-  return {'op': 'apropos', 'ns': fireplace#ns(), 'var-query': a:var_query}
+  return {'op': 'apropos', 'ns': fireplace#ns(), 'var-query': a:var_query, 'full-doc?': 1}
 endf
 
 fun! replant#generate#jump_to_source_full_symbol(full_symbol)

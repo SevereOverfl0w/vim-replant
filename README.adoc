@@ -125,10 +125,6 @@ NOTE: Special symbols, recognizable by their lack of namespace, do not have a so
 
 WARNING: The doc information is not well tested, and is highly subject to change.
 
-You can control whether doc strings are shown alongside vars by setting `g:replant_apropos_doc` to `1`.
-
-WARNING: I may remove this global flag and change how this is controlled.
-
 == Developing
 
 I use link:https://squiddev.github.io/urn/[urn] to generate lua files from lisp.
