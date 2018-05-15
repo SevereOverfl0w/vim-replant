@@ -220,7 +220,11 @@ fun! replant#handle#apropos_fzf(msgs)
   let result = a:msgs[0]
   let apropos_matches = get(result, 'apropos-matches', [])
 
-  let resources = map(apropos_matches, {idx, x -> x['name'].':'.x['doc']})
+  let resources = []
+  
+  for m in apropos_matches 
+    let resources += [m['name'].':', '', '  '.m['doc']]
+  endfor
 
   let actions = {'ctrl-x': ['jump', 'split'],
                \ 'ctrl-v': ['jump', 'vertical split'],
@@ -231,9 +235,9 @@ fun! replant#handle#apropos_fzf(msgs)
   let Resolver = {a -> get(actions, a, ['jump', 'edit'])}
 
   let file = tempname()
-  let preview_command = 'grep -ae {}: '.file.' | cut -d : -f 2-9999 | xargs --null printf "%s\n" | sed -e "s/^[[:space:]]*//"'
+  let preview_command = 'grep -a -A 2 {}: '.file.' | xargs --null printf "%s\n"'
   call writefile(resources, file)
-  let opts = {'source': map(resources, {idx, x -> split(x, ":")[0]}),
+  let opts = {'source': map(apropos_matches, {idx, x -> x['name']}),
             \ 'sink*': function('replant#fzf#symbol_jump', [Resolver]),
             \ 'options': "--expect=ctrl-t,ctrl-v,ctrl-x,ctrl-i,ctrl-y --multi --tiebreak=index --color --preview-window wrap --preview '".preview_command."'"}
   call fzf#run(fzf#wrap(opts))
