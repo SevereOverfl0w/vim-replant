@@ -156,6 +156,12 @@ fun! replant#handle_plain_stack(error)
   lopen
 endf
 
+fun! replant#gui_color_lookup(color)
+ let colors = ['black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'white', 'black', 'red', 'green', 'yellow', 'blue', 'purple', 'cyan', 'white']
+ let color_number = index(colors, a:color)
+ return get(g:, 'terminal_color_'.color_number, a:color)
+endf
+
 fun! replant#hl_state_to_group(state)
   let name = ''
 
@@ -181,12 +187,12 @@ fun! replant#hl_state_to_group(state)
 
   if get(a:state, 'fg') isnot 0
     let fg = get(a:state, 'fg')
-    let cmd .= ' ctermfg='.fg.' guifg='.fg
+    let cmd .= ' ctermfg='.fg.' guifg='.replant#gui_color_lookup(fg)
   endif
 
   if get(a:state, 'bg') isnot 0
     let bg = get(a:state, 'bg')
-    let cmd .= ' ctermbg='.bg.' guibg='.bg
+    let cmd .= ' ctermbg='.bg.' guibg='.replant#gui_color_lookup(bg)
   endif
 
   if get(a:state, 'attrs', {}) != {}
