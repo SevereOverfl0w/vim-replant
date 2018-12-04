@@ -323,7 +323,9 @@ fun! replant#handle_refresh_msg(msg)
 
   let s:handle_refresh_last_is_out[a:msg.id] = has_key(a:msg, 'out')
 
-  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'error')
+  if has_key(a:msg, 'status') && s:contains(a:msg['status'], 'unknown-op')
+    echoerr 'Unknown operation: refresh. Please configure your nrepl server.'
+  elseif has_key(a:msg, 'status') && s:contains(a:msg['status'], 'error')
     call replant#handle_plain_stack(a:msg['error'])
   endif
 endf
