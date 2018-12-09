@@ -362,5 +362,8 @@ function! replant#insert_ns_definition_maybe()
       call append(0, '(ns '.replant#ui#expected_ns().')')
     endif
   catch /Fireplace:.*/
+    echohl Error
+    echo 'Fireplace error during trying to insert expected ns '.v:exception
+    echohl Normal
   endtry
 endfunction
