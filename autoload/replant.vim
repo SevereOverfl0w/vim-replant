@@ -365,7 +365,7 @@ fun! replant#detect_refresh_before()
     return g:replant_refresh_before_hook
   else
     let detected_before = s:eval_value(replant#read_clj_file('locate_before.clj'))
-    if detected_before && detected_before !=# 'nil'
+    if type(detected_before) == v:t_string && detected_before !=# 'nil'
       return detected_before
     endif
   endif
@@ -376,7 +376,7 @@ fun! replant#detect_refresh_after()
     return g:replant_refresh_after_hook
   else
     let detected_after = s:eval_value(replant#read_clj_file('locate_after.clj'))
-    if detected_after && detected_after !=# 'nil'
+    if type(detected_after) == v:t_string && detected_after !=# 'nil'
       return detected_after
     endif
   endif
