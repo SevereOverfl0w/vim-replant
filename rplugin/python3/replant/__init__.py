@@ -2,6 +2,9 @@ import neovim
 import replant.deps.nrepl_python_client.nrepl as nrepl
 import uuid
 
+from urllib.request import urlopen
+import json
+
 @neovim.plugin
 class Replant(object):
 
@@ -49,3 +52,8 @@ class Replant(object):
                 break
 
         return True
+
+    @neovim.function("G_replant_http_json", sync=True)
+    def http_json(self, args):
+        res = urlopen(args[0])
+        return json.loads(res.read().decode('utf8'))

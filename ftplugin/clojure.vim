@@ -3,6 +3,7 @@ nnoremap <silent><buffer> <localleader>rf :<C-U>call replant#ui#refresh()<CR>
 nnoremap <silent><buffer> <localleader>ra :<C-U>call replant#ui#refresh_all()<CR>
 
 nnoremap <silent><buffer> <localleader>nsc :<C-U>call replant#ui#clean_ns()<CR>
+nnoremap <silent><buffer> <localleader>X :<C-U>ReplantExample<CR>
 
 command! -buffer -nargs=? ReplantDoc call replant#doc(replant#message#send_collect(replant#doc_msg(fireplace#ns(), <f-args>)))
 
@@ -43,3 +44,5 @@ nnoremap <silent><buffer> <localleader>rtp :<C-U>call replant#ui#test_project()<
 command! -buffer -nargs=+ ReplantTestStacktrace call replant#ui#test_stacktrace(<f-args>)
 
 command! -buffer -nargs=* -complete=customlist,replant#command_parser#complete_apropos ReplantApropos call replant#ui#apropos(<q-bang>, [<line1>, <line2>], <q-args>)
+
+command! -buffer -nargs=? ReplantExample call replant#example#sym(<q-args>)
