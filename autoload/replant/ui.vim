@@ -254,3 +254,8 @@ fun! replant#ui#jump_to_source_full_symbol(edit_cmd, full_symbol)
 
   call replant#handle#info_jump_to_source(a:edit_cmd, msgs)
 endf
+
+fun! replant#ui#clean_ns()
+  let send = replant#generate#buf_clean_ns()
+  call replant#send#message_callback(send, 'replant#handle#clean_ns')
+endf

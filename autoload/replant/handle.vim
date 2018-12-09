@@ -261,3 +261,9 @@ fun! replant#handle#info_jump_to_source(edit_cmd, msgs)
 
   execute ':'.a:edit_cmd.' +call\ cursor('.line.','.column.') '.file
 endf
+
+fun! replant#handle#clean_ns(msg)
+  if has_key(a:msg, 'ns')
+    call replant#util#replace_ns(split(a:msg.ns, '\n'))
+  endif
+endf

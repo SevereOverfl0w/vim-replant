@@ -102,3 +102,9 @@ endf
 fun! replant#generate#jump_to_source_full_symbol(full_symbol)
   return {'op': 'info', 'ns': 'clojure.core', 'symbol': a:full_symbol}
 endf
+
+fun! replant#generate#buf_clean_ns()
+  return {'op': 'clean-ns',
+        \ 'path': expand('%:p'),
+        \ 'prefix-rewriting': get(g:, 'replant_prefix_rewriting', 0) ? 'true' : 'false'}
+endf
