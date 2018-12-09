@@ -336,11 +336,28 @@ endf
 
 fun! s:eval_value(code)
   let msgs = replant#send#message({'op': 'eval', 'code': a:code, 'ns': 'user'})
+  let error = 0
+
   for msg in msgs
-    if has_key(msg, 'value')
-      return msg.value
+    if has_key(msg, 'status') && s:contains(msg['status'], 'eval-error')
+      let error = 1
+    endif
+
+    if has_key(msg, 'err')
+      echohl Error
+      echoerr substitute(msg['err'], '\n', ' ', 'g')
+      echohl Normal
     endif
   endfor
+
+  if !error
+    for msg in msgs
+      if has_key(msg, 'value')
+        return msg.value
+      endif
+    endfor
+  endif
+
 endf
 
 fun! replant#detect_refresh_before()
