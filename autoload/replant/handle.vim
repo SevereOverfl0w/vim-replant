@@ -35,7 +35,7 @@ fun! replant#handle#stacktrace_qf(qfs, stacktraces)
 
     if has_key(stacktrace, 'file-url') && type(stacktrace['file-url']) == v:t_string
       let file = replant#url_to_vim(stacktrace['file-url'])
-      let d.filename = fnamemodify(file, ':~:.')
+      let d.filename = fnamemodify(file, ':.')
     else
       " Emacs-ism, ugh. It returns [] for "nil", like, wtf?
       let f = get(stacktrace, 'file')
