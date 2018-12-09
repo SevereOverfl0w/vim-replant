@@ -51,25 +51,29 @@ endf
 
 fun! replant#handle#insert_top_level_messages(qfs, errors)
   for e in a:errors
-    if has_key(e, 'message')
-      let d = {}
+    let d = {}
 
-      if has_key(e, 'file-url') && type(e['file-url']) == v:t_string
-        let d.filename = replant#url_to_vim(e['file-url'])
-      endif
-
-      if has_key(e, 'line')
-        let d.lnum = e.line
-      endif
-
-      if has_key(e, 'column')
-        let d.col = e.column
-      endif
-
-      let d.text = e.message
-
-      call insert(a:qfs, d)
+    if has_key(e, 'file-url') && type(e['file-url']) == v:t_string
+      let d.filename = replant#url_to_vim(e['file-url'])
     endif
+
+    if has_key(e, 'line')
+      let d.lnum = e.line
+    endif
+
+    if has_key(e, 'column')
+      let d.col = e.column
+    endif
+
+    if has_key(e, 'class') && type(e.message) == v:t_string
+      let d.text = e.class . ': '
+    endif
+
+    if has_key(e, 'message') && type(e.message) == v:t_string
+      let d.text .= e['message']
+    endif
+
+    call insert(a:qfs, d)
   endfor
 endf
 
