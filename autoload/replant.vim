@@ -334,12 +334,21 @@ fun! replant#read_clj_file(filename)
   return join(readfile(globpath(&runtimepath, 'autoload/replant/'.a:filename)), "\n")
 endf
 
+fun! s:eval_value(code)
+  let msgs = replant#send#message({'op': 'eval', 'code': a:code, 'ns': 'user'})
+  for msg in msgs
+    if has_key(msg, 'value')
+      return msg.value
+    endif
+  endfor
+endf
+
 fun! replant#detect_refresh_before()
   if exists('g:replant_refresh_before_hook')
     return g:replant_refresh_before_hook
   else
-    let detected_before = fireplace#platform().eval(replant#read_clj_file('locate_before.clj'), {'ns': 'user'})['value']
-    if detected_before !=# 'nil'
+    let detected_before = s:eval_value(replant#read_clj_file('locate_before.clj'))
+    if detected_before && detected_before !=# 'nil'
       return detected_before
     endif
   endif
@@ -349,8 +358,8 @@ fun! replant#detect_refresh_after()
   if exists('g:replant_refresh_after_hook')
     return g:replant_refresh_after_hook
   else
-    let detected_after = fireplace#platform().eval(replant#read_clj_file('locate_after.clj'), {'ns': 'user'})['value']
-    if detected_after !=# 'nil'
+    let detected_after = s:eval_value(replant#read_clj_file('locate_after.clj'))
+    if detected_after && detected_after !=# 'nil'
       return detected_after
     endif
   endif
