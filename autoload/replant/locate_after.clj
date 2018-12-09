@@ -1,6 +1,7 @@
 (do
   (clojure.core/create-ns 'replant.locate)
   (clojure.core/in-ns 'replant.locate)
+  (clojure.core/require '[clojure.core :refer :all])
 
   (some identity
         (for [potential-dev-ns ['dev 'user 'boot.user]
