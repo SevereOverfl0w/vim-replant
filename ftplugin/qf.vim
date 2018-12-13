@@ -5,4 +5,4 @@
 setlocal concealcursor=nvic
 setlocal conceallevel=2
 
-call matchadd('Conceal', 'zipfile:.*::', 99, -1, {'conceal': ''})
+call matchadd('Conceal', 'zipfile:.*::', -1, -1, {'conceal': ''})
