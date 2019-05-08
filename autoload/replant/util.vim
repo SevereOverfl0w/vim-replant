@@ -51,7 +51,7 @@ func! replant#util#replace_ns(lines)
     return
   endif
 
-  let [end_lnum, end_col] = searchpairpos('(ns', '', ')', 'n', skip)
+  let [end_lnum, end_col] = searchpairpos('(', '', ')', 'n', skip)
 
   echo start_lnum . ' ' . end_lnum
 
