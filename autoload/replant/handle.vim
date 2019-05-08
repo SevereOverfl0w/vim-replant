@@ -263,7 +263,7 @@ fun! replant#handle#info_jump_to_source(edit_cmd, msgs)
 endf
 
 fun! replant#handle#clean_ns(msg)
-  if has_key(a:msg, 'ns')
+  if has_key(a:msg, 'ns') && type(a:msg['ns']) != v:t_list
     call replant#util#replace_ns(split(a:msg.ns, '\n'))
   endif
 endf
