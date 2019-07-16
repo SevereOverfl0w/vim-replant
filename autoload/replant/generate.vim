@@ -108,3 +108,15 @@ fun! replant#generate#buf_clean_ns()
         \ 'path': expand('%:p'),
         \ 'prefix-rewriting': get(g:, 'replant_prefix_rewriting', 0) ? 'true' : 'false'}
 endf
+
+fun! replant#generate#source(symbol)
+  return {'op': 'eval',
+        \ 'code': "(do (with-out-str (require 'clojure.repl)) (clojure.repl/source " . a:symbol . "))",
+        \  'ns': fireplace#ns()}
+endf
+
+fun! replant#generate#info(symbol)
+  return {'op': 'info',
+        \ 'symbol': a:symbol,
+        \ 'ns': fireplace#ns()}
+endf

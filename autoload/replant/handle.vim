@@ -267,3 +267,15 @@ fun! replant#handle#clean_ns(msg)
     call replant#util#replace_ns(split(a:msg.ns, '\n'))
   endif
 endf
+
+fun! replant#handle#read_source(msgs)
+  let out = ''
+  for msg in a:msgs
+      if has_key(msg, 'out')
+          let out = msg.out
+          break
+      endif
+  endfor
+
+  return out
+endf

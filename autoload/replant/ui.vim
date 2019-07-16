@@ -259,3 +259,37 @@ fun! replant#ui#clean_ns()
   let send = replant#generate#buf_clean_ns()
   call replant#send#message_callback(send, 'replant#handle#clean_ns')
 endf
+
+fun! replant#ui#peek_promote() abort
+    if !has_key(b:, 'replant_info')
+        return
+    endif
+
+    let info = b:replant_info
+    call replant#peek#ClosePeek()
+    call replant#handle#info_jump_to_source('edit', info)
+endf
+
+fun! s:peek_source_setup(ns, info, bufhandle, winid) abort
+  call nvim_buf_set_var(a:bufhandle, 'fireplace_ns', a:ns)
+  call nvim_buf_set_var(a:bufhandle, 'replant_info', a:info)
+  call nvim_buf_set_option(a:bufhandle, 'filetype', 'clojure')
+  call nvim_win_set_option(a:winid, 'wrap', v:false)
+  call nvim_win_set_option(a:winid, 'number', v:false)
+  call nvim_win_set_option(a:winid, 'relativenumber', v:false)
+
+  call nvim_buf_set_keymap(a:bufhandle, 'n', '<c-e>', '<cmd>call replant#ui#peek_promote()<CR>', {})
+endf
+
+fun! replant#ui#peek_source(symbol) abort
+  let send = replant#generate#source(a:symbol)
+  let msgs = replant#send#message(send)
+  let source = replant#handle#read_source(msgs)
+
+  let info_send = replant#generate#info(a:symbol)
+  let info_msgs = replant#send#message(info_send)
+  let info = info_msgs[0]
+
+  let lines = split(source, '\n')
+  call replant#peek#FloatContents(lines, function('<SID>peek_source_setup', [get(info, 'ns', ''), info_msgs]))
+endf

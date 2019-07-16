@@ -5,6 +5,8 @@ nnoremap <silent><buffer> <localleader>ra :<C-U>call replant#ui#refresh_all()<CR
 nnoremap <silent><buffer> <localleader>nsc :<C-U>call replant#ui#clean_ns()<CR>
 nnoremap <silent><buffer> <localleader>X :<C-U>ReplantExample<CR>
 
+nmap <silent><buffer> <Plug>ReplantPeekSource <cmd>call replant#ui#peek_source(expand('<cword>'))<CR>
+
 command! -buffer -nargs=? ReplantDoc call replant#doc(replant#message#send_collect(replant#doc_msg(fireplace#ns(), <f-args>)))
 
 fun! s:replant_doc(...)
