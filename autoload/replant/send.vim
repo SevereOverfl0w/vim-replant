@@ -3,7 +3,7 @@ fun! s:get_port()
 
   if has_key(l:platform, 'transport') && has_key(l:platform['transport'], 'url')
     let l:url = l:platform['transport']['url']
-    let l:port = matchstr(l:url, ':\zs\d\+$')
+    let l:port = matchstr(l:url, ':\zs\d\+')
     return l:port
   else
     return l:platform['connection']['transport']['port']
