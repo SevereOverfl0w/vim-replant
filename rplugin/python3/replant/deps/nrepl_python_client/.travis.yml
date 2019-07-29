@@ -1,7 +1,0 @@
-lein: lein2
-language: python
-python:
-  - "2.7"
-  - "3.3"
-script: python test.py
-

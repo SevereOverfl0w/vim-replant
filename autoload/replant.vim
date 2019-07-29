@@ -335,7 +335,7 @@ fun! replant#read_clj_file(filename)
 endf
 
 fun! s:eval_value(code)
-  let msgs = replant#send#message({'op': 'eval', 'code': a:code, 'ns': 'user'})
+  let msgs = fireplace#clj().Message({'op': 'eval', 'code': a:code, 'ns': 'user'}, v:t_list)
   let error = 0
 
   for msg in msgs
