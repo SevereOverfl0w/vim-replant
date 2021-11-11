@@ -271,7 +271,7 @@ fun! replant#ui#peek_promote() abort
 endf
 
 fun! ReplantPeekReal(path)
-  return substitute(a:path, '^ReplantPeek:\d\d*/', '', '')
+  return substitute(substitute(a:path, '^ReplantPeek:\d\d*/', '', ''), '\C^zipfile:\(.*\)::', '\1/', '')
 endf
 
 let s:peeks = 0
@@ -281,7 +281,7 @@ fun! s:peek_source_setup(ns, info, bufhandle, winid) abort
   call nvim_buf_set_var(a:bufhandle, 'replant_info', a:info)
   if len(a:info) > 0
     let file = substitute(substitute(a:info[0].file,
-            \ '^jar:file:\([^!]*\)!', 'zipfile:\1:', ''),
+            \ '^jar:file:\([^!]*\)!', 'zipfile:\1::', ''),
             \ '^file:', '', '')
     call nvim_buf_set_name(a:bufhandle, 'ReplantPeek:'.s:peeks.'/'.file)
     let s:peeks += 1
