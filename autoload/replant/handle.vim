@@ -239,7 +239,7 @@ fun! replant#handle#apropos_fzf(msgs)
   let Resolver = {a -> get(actions, a, ['jump', 'edit'])}
 
   let file = tempname()
-  let preview_command = 'grep -a -A 2 {}: '.file.' | xargs --null printf "%s\n"'
+  let preview_command = 'grep -a -A 2 {}: '.file.' | xargs -0 printf "%s\n"'
   call writefile(resources, file)
   let opts = {'source': map(apropos_matches, {idx, x -> x['name']}),
             \ 'sink*': function('replant#fzf#symbol_jump', [Resolver]),
